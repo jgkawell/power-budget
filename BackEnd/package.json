@@ -1,0 +1,16 @@
+{
+    "name": "todo-server",
+    "main": "server.js",
+    "scripts": {
+        "lint": "eslint \"./**/*.js\""
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.6.1",
+        "http2": "^3.3.7",
+        "pg-promise": "^8.5.1"
+    },
+    "devDependencies": {
+        "eslint": "^7.1.0"
+    }
+}

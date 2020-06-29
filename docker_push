@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker push jgkawell/power-budget-frontend:latest
+docker push jgkawell/power-budget-backend:latest
+docker push jgkawell/power-budget-database:latest
