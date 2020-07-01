@@ -1,22 +1,24 @@
-var express = require('express');
+import express from 'express';
+import cors from 'cors';
+import config from './config.js';
+import bodyParser from 'body-parser';
+import { db } from './utils/db.js';
+import tasks from './api/tasks.js';
+import https from 'https';
+import fs from 'fs';
+
+// Set up application
 var app = express();
-
-var cors = require('cors');
-var config = require('./config');
-
-var bodyParser = require('body-parser');
-app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-require('./api/db')(app);
+// Set up routes
+tasks(app, db);
 
 // If running in prod, use SSL
 if (config.production === 'true') {
   console.log('Running in prod mode (https)');
-
-  var https = require('https');
-  var fs = require('fs');
 
   var httpsOptions = {
     key: fs.readFileSync('ssl/server.key'),

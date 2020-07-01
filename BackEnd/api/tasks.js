@@ -1,31 +1,5 @@
-var config = require('../config');
 
-// Log db connection errors
-const initOptions = {
-  error(error, e) {
-    if (e.cn) {
-      console.log('CN:', e.cn);
-      console.log('EVENT:', error.message || error);
-    }
-  },
-};
-
-// Create Database Connection
-var pgp = require('pg-promise')(initOptions);
-const dbConfig = config.db;
-var db = pgp(dbConfig);
-
-// Test connection
-db.connect()
-  .then((obj) => {
-    console.log('Connected to database');
-    obj.done(); // success, release connection;
-  })
-  .catch((error) => {
-    console.error('ERROR:', error.message);
-  });
-
-module.exports = function (app) {
+export default function(app, db) {
   // Verify the server is up and reachable
   app.get('/', function (req, res) {
     res.send({ msg: 'Server is running...' });
