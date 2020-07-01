@@ -1,11 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import config from './config.js';
 import bodyParser from 'body-parser';
-import { db } from './utils/db.js';
-import tasks from './api/tasks.js';
-import https from 'https';
+import config from './config.js';
+import cors from 'cors';
+import express from 'express';
 import fs from 'fs';
+import https from 'https';
+import { baseRouter } from './api/index.js';
+import { todoRouter } from './api/todos.js';
 
 // Set up application
 var app = express();
@@ -13,8 +13,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-// Set up routes
-tasks(app, db);
+// Initialize routing
+app.use('/', baseRouter);
+app.use('/todo', todoRouter);
 
 // If running in prod, use SSL
 if (config.production === 'true') {
