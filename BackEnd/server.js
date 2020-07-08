@@ -5,7 +5,8 @@ import express from 'express';
 import fs from 'fs';
 import https from 'https';
 import { baseRouter } from './api/index.js';
-import { todoRouter } from './api/todos.js';
+import { creditRouter } from './api/credits.js';
+import { debitRouter } from './api/debits.js';
 
 // Set up application
 var app = express();
@@ -15,7 +16,8 @@ app.use(cors());
 
 // Initialize routing
 app.use('/', baseRouter);
-app.use('/todo', todoRouter);
+app.use('/credit', creditRouter);
+app.use('/debit', debitRouter);
 
 // If running in prod, use SSL
 if (config.production === 'true') {
