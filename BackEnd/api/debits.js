@@ -18,10 +18,9 @@ debitRouter.get('/all', function (req, res) {
 
 // Get a debit entry by its id
 debitRouter.get('/id', function (req, res) {
-
   const props = { id: req.body.id };
 
-  const statement = "SELECT * FROM debits WHERE id = ${id};";
+  const statement = 'SELECT * FROM debits WHERE id = ${id};';
 
   db.any(statement, props)
     .then((results) => {
@@ -39,7 +38,6 @@ debitRouter.get('/id', function (req, res) {
 
 // Insert a new debit entry into the db
 debitRouter.post('/', function (req, res) {
-
   const props = {
     posted_date: req.body.posted_date,
     amount: req.body.amount,
@@ -47,13 +45,14 @@ debitRouter.post('/', function (req, res) {
     purpose: req.body.purpose,
     account: req.body.account,
     budget: req.body.budget,
-    notes: req.body.notes || ""
+    notes: req.body.notes || '',
   };
 
-  const statement = "INSERT INTO \
+  const statement =
+    'INSERT INTO \
     debits(posted_date, amount, vendor, purpose, account, budget, notes) \
     VALUES(${posted_date}, ${amount}, ${vendor}, ${purpose}, ${account}, ${budget}, ${notes}) \
-    RETURNING *;";
+    RETURNING *;';
 
   db.any(statement, props)
     .then((results) => {
@@ -67,18 +66,17 @@ debitRouter.post('/', function (req, res) {
 
 // Update the title, and status of a debit entry
 debitRouter.put('/', function (req, res) {
-
   const props = req.body;
 
   // Build statement
-  var statement = "UPDATE debits SET ";
+  var statement = 'UPDATE debits SET ';
   for (const [key, value] of Object.entries(props)) {
-    if (key != "id") {
-      statement += key + " = ${" + key + "}, ";
+    if (key != 'id') {
+      statement += key + ' = ${' + key + '}, ';
     }
   }
-  statement = statement.slice(0, -2); 
-  statement += " WHERE id = ${id} RETURNING *;";
+  statement = statement.slice(0, -2);
+  statement += ' WHERE id = ${id} RETURNING *;';
 
   db.any(statement, props)
     .then((results) => {
@@ -97,7 +95,7 @@ debitRouter.put('/', function (req, res) {
 // Delete a debit by id
 debitRouter.delete('/:id', function (req, res) {
   const props = { id: req.params.id };
-  const statement = "DELETE FROM debits WHERE id = ${id} RETURNING *;";
+  const statement = 'DELETE FROM debits WHERE id = ${id} RETURNING *;';
 
   db.any(statement, props)
     .then((results) => {
