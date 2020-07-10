@@ -66,12 +66,21 @@ debitRouter.post('/', function (req, res) {
 
 // Update the title, and status of a debit entry
 debitRouter.put('/', function (req, res) {
-  const props = req.body;
+  const props = {
+    id: req.body.id,
+    posted_date: req.body.posted_date,
+    amount: req.body.amount,
+    vendor: req.body.vendor,
+    purpose: req.body.purpose,
+    account: req.body.account,
+    budget: req.body.budget,
+    notes: req.body.notes
+  };
 
   // Build statement
-  var statement = 'UPDATE debits SET ';
-  for (const key of Object.keys(props)) {
-    if (key != 'id') {
+  var statement = 'UPDATE credits SET ';
+  for (const [ key, value ] of Object.entries(props)) {
+    if (value && key != 'id') {
       statement += key + ' = ${' + key + '}, ';
     }
   }

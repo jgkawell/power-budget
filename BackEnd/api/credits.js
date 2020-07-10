@@ -66,12 +66,21 @@ creditRouter.post('/', function (req, res) {
 
 // Update the title, and status of a credit entry
 creditRouter.put('/', function (req, res) {
-  const props = req.body;
+  const props = {
+    id: req.body.id,
+    posted_date: req.body.posted_date,
+    amount: req.body.amount,
+    source: req.body.source,
+    purpose: req.body.purpose,
+    account: req.body.account,
+    budget: req.body.budget,
+    notes: req.body.notes
+  };
 
   // Build statement
   var statement = 'UPDATE credits SET ';
-  for (const key of Object.keys(props)) {
-    if (key != 'id') {
+  for (const [ key, value ] of Object.entries(props)) {
+    if (value && key != 'id') {
       statement += key + ' = ${' + key + '}, ';
     }
   }
