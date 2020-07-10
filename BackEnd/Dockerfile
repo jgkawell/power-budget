@@ -1,5 +1,7 @@
-FROM node:12.18.0-alpine
-COPY package.json ./
+FROM node:14.3.0-alpine
+RUN mkdir /app
+COPY package.json /app
+WORKDIR /app
 RUN npm install
-COPY . .
-CMD node server.js
+COPY . /app
+CMD npm run start
