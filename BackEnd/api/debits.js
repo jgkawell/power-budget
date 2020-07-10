@@ -70,7 +70,7 @@ debitRouter.put('/', function (req, res) {
 
   // Build statement
   var statement = 'UPDATE debits SET ';
-  for (const [key, value] of Object.entries(props)) {
+  for (const key of Object.keys(props)) {
     if (key != 'id') {
       statement += key + ' = ${' + key + '}, ';
     }
