@@ -5,6 +5,7 @@ import express from 'express';
 import fs from 'fs';
 import https from 'https';
 import { baseRouter } from './api/index.js';
+import { accountRouter } from './api/accounts.js';
 import { creditRouter } from './api/credits.js';
 import { debitRouter } from './api/debits.js';
 
@@ -16,6 +17,7 @@ app.use(cors());
 
 // Initialize routing
 app.use('/', baseRouter);
+app.use('/account', accountRouter)
 app.use('/credit', creditRouter);
 app.use('/debit', debitRouter);
 
