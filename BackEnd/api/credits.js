@@ -39,7 +39,7 @@ creditRouter.get('/id', function (req, res) {
 // Insert a new credit entry into the db
 creditRouter.post('/', function (req, res) {
   const props = {
-    posted_date: req.body.posted_date,
+    posted_date: req.body.postedDate,
     amount: req.body.amount,
     source: req.body.source,
     purpose: req.body.purpose,
@@ -68,7 +68,7 @@ creditRouter.post('/', function (req, res) {
 creditRouter.put('/', function (req, res) {
   const props = {
     id: req.body.id,
-    posted_date: req.body.posted_date,
+    posted_date: req.body.postedDate,
     amount: req.body.amount,
     source: req.body.source,
     purpose: req.body.purpose,

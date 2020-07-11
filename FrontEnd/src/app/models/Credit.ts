@@ -1,6 +1,6 @@
 export class Debit {
   id?: number;
-  posted_date: Date;
+  postedDate: Date;
   amount: number;
   source: string;
   purpose: string;

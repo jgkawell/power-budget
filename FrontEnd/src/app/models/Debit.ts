@@ -1,10 +1,10 @@
 export class Debit {
   id?: number;
-  posted_date: Date;
+  postedDate: Date;
   amount: number;
   vendor: string;
   purpose: string;
   account: string;
-  budget: string;
+  budget: number;
   notes: string;
 }

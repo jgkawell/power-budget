@@ -39,7 +39,7 @@ debitRouter.get('/id', function (req, res) {
 // Insert a new debit entry into the db
 debitRouter.post('/', function (req, res) {
   const props = {
-    posted_date: req.body.posted_date,
+    posted_date: req.body.postedDate,
     amount: req.body.amount,
     vendor: req.body.vendor,
     purpose: req.body.purpose,
@@ -68,7 +68,7 @@ debitRouter.post('/', function (req, res) {
 debitRouter.put('/', function (req, res) {
   const props = {
     id: req.body.id,
-    posted_date: req.body.posted_date,
+    posted_date: req.body.postedDate,
     amount: req.body.amount,
     vendor: req.body.vendor,
     purpose: req.body.purpose,
