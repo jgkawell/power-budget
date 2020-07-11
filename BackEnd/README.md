@@ -1,3 +1,3 @@
 # BackEnd
 
-Simple Node.js server connected to a Docker Postgres DB for power-budget
+Simple Node.js server connected to a Postgres DB for power-budget

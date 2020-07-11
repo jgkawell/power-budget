@@ -1,0 +1,7 @@
+<app-add-debit (addDebit)="addDebit($event)"></app-add-debit>
+<app-debit-item
+  *ngFor="let debit of debits"
+  [debit]="debit"
+  (deleteDebit)="deleteDebit($event)"
+>
+</app-debit-item>
