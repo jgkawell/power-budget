@@ -1,0 +1,7 @@
+<div [ngClass]="setClasses()">
+  <p>
+    <input (change)="onToggle(debit)" type="checkbox" />
+    {{ debit.vendor }}
+    <button (click)="onDelete(debit)" class="del">x</button>
+  </p>
+</div>

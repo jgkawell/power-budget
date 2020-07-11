@@ -8,19 +8,19 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './components/pages/about/about.component';
-import { AddTodoComponent } from './components/add-todo/add-todo.component';
+import { AddDebitComponent } from './components/add-debit/add-debit.component';
 import { HeaderComponent } from './components/layout/header/header.component';
-import { TodosComponent } from './components/todos/todos.component';
-import { TodoItemComponent } from './components/todo-item/todo-item.component';
+import { DebitsComponent } from './components/debits/debits.component';
+import { DebitItemComponent } from './components/debit-item/debit-item.component';
 import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TodosComponent,
-    TodoItemComponent,
+    DebitsComponent,
+    DebitItemComponent,
     HeaderComponent,
-    AddTodoComponent,
+    AddDebitComponent,
     AboutComponent,
   ],
   imports: [
