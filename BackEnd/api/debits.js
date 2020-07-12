@@ -60,7 +60,7 @@ debitRouter.post('/', function (req, res, next) {
     RETURNING *;';
 
   // Make sure budget number is valid
-  if (!BUDGET_NUMS.includes(props.budget)) {
+  if (!BUDGET_NUMS.includes(parseInt(props.budget))) {
     throw new RequestError(`Invalid budget number: ${props.budget}`);
   }
 
@@ -73,7 +73,7 @@ debitRouter.post('/', function (req, res, next) {
     });
 });
 
-// Update the title, and status of a debit entry
+// Update the values of a debit entry
 debitRouter.put('/', function (req, res, next) {
   const props = {
     id: req.body.id,
@@ -92,7 +92,7 @@ debitRouter.put('/', function (req, res, next) {
   }
 
   // Make sure budget number is valid
-  if (props.budget && !BUDGET_NUMS.includes(props.budget)) {
+  if (props.budget && !BUDGET_NUMS.includes(parseInt(props.budget))) {
     throw new RequestError(`Invalid budget number: ${props.budget}`);
   }
 
