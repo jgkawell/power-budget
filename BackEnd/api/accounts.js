@@ -1,46 +1,51 @@
 import { db } from '../utils/db.js';
+import { camelKeysArray } from '../utils/convert-case.js';
 import express from 'express';
+import { BUDGET_NUMS, NO_RECORDS_MESSAGE } from '../utils/constants.js';
+import { DatabaseError, RequestError } from '../utils/errors.js';
 
 var accountRouter = express.Router();
 
 // Get all the available accounts
-accountRouter.get('/all', function (req, res) {
+accountRouter.get('/all', function (req, res, next) {
   var query = 'SELECT * FROM accounts;';
   db.any(query)
     .then((results) => {
-      res.send(results);
+      res.send(camelKeysArray(results));
     })
     .catch((error) => {
-      console.error('ERROR:', error.message);
-      res.status(500).send('Failed to query database');
+      next(new DatabaseError(error.message));
     });
 });
 
 // Get a account entry by its id
 accountRouter.get('/id', function (req, res) {
   const props = { id: req.body.id };
-
   const statement = 'SELECT * FROM accounts WHERE id = ${id};';
+
+  // Make sure id was given
+  if (!props.id) {
+    throw new RequestError('id is required');
+  }
 
   db.any(statement, props)
     .then((results) => {
       if (results.length == 0) {
-        res.send({ msg: 'id did not match any database records' });
+        next(new RequestError(NO_RECORDS_MESSAGE));
       } else {
-        res.send(results);
+        res.send(camelKeysArray(results));
       }
     })
     .catch((error) => {
-      console.error('ERROR:', error.message);
-      res.status(500).send('Failed to query database');
+      next(new DatabaseError(error.message));
     });
 });
 
 // Insert a new account entry into the db
 accountRouter.post('/', function (req, res) {
   const props = {
-    name: req.body.name,
-    type: req.body.type,
+    name: req.body.name || '',
+    type: req.body.type || '',
     card_number: req.body.card_number || '',
     account_number: req.body.account_number || ''
   };
@@ -56,8 +61,7 @@ accountRouter.post('/', function (req, res) {
       res.send(results);
     })
     .catch((error) => {
-      console.error('ERROR:', error.message);
-      res.status(500).send('Failed to query database');
+      next(new DatabaseError(error.message));
     });
 });
 
@@ -70,6 +74,11 @@ accountRouter.put('/', function (req, res) {
     card_number: req.body.card_number,
     account_number: req.body.account_number
   };
+
+  // Make sure id was given
+  if (!props.id) {
+    throw new RequestError('id is required');
+  }
 
   // Build statement
   var statement = 'UPDATE accounts SET ';
@@ -84,33 +93,36 @@ accountRouter.put('/', function (req, res) {
   db.any(statement, props)
     .then((results) => {
       if (results.length == 0) {
-        res.send({ msg: 'id did not match any database records' });
+        next(new RequestError(NO_RECORDS_MESSAGE));
       } else {
-        res.send(results);
+        res.send(camelKeysArray(results));
       }
     })
     .catch((error) => {
-      console.error('ERROR:', error.message);
-      res.status(500).send('Failed to query database');
+      next(new DatabaseError(error.message));
     });
 });
 
 // Delete a account by id
-accountRouter.delete('/:id', function (req, res) {
-  const props = { id: req.params.id };
+accountRouter.delete('/', function (req, res) {
+  const props = { id: req.body.id };
   const statement = 'DELETE FROM accounts WHERE id = ${id} RETURNING *;';
+
+  // Make sure id was given
+  if (!props.id) {
+    throw new RequestError('id is required');
+  }
 
   db.any(statement, props)
     .then((results) => {
       if (results.length == 0) {
-        res.send({ msg: 'id did not match any database records' });
+        next(new RequestError(NO_RECORDS_MESSAGE));
       } else {
-        res.send(results);
+        res.send(camelKeysArray(results));
       }
     })
     .catch((error) => {
-      console.error('ERROR:', error.message);
-      res.status(500).send('Failed to query database');
+      next(new DatabaseError(error.message));
     });
 });
 
