@@ -1,7 +1,7 @@
 import { db } from '../utils/db.js';
 import { camelKeysArray } from '../utils/convert-case.js';
 import express from 'express';
-import { BUDGET_NUMS, NO_RECORDS_MESSAGE } from '../utils/constants.js';
+import { NO_RECORDS_MESSAGE } from '../utils/constants.js';
 import { DatabaseError, RequestError } from '../utils/errors.js';
 
 var accountRouter = express.Router();
@@ -19,7 +19,7 @@ accountRouter.get('/all', function (req, res, next) {
 });
 
 // Get a account entry by its id
-accountRouter.get('/id', function (req, res) {
+accountRouter.get('/id', function (req, res, next) {
   const props = { id: req.body.id };
   const statement = 'SELECT * FROM accounts WHERE id = ${id};';
 
@@ -42,7 +42,7 @@ accountRouter.get('/id', function (req, res) {
 });
 
 // Insert a new account entry into the db
-accountRouter.post('/', function (req, res) {
+accountRouter.post('/', function (req, res, next) {
   const props = {
     name: req.body.name || '',
     type: req.body.type || '',
@@ -66,7 +66,7 @@ accountRouter.post('/', function (req, res) {
 });
 
 // Update the title, and status of a account entry
-accountRouter.put('/', function (req, res) {
+accountRouter.put('/', function (req, res, next) {
   const props = {
     id: req.body.id,
     name: req.body.name,
@@ -104,7 +104,7 @@ accountRouter.put('/', function (req, res) {
 });
 
 // Delete a account by id
-accountRouter.delete('/', function (req, res) {
+accountRouter.delete('/', function (req, res, next) {
   const props = { id: req.body.id };
   const statement = 'DELETE FROM accounts WHERE id = ${id} RETURNING *;';
 
