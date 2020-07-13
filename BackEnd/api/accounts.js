@@ -47,7 +47,7 @@ accountRouter.post('/', function (req, res, next) {
     name: req.body.name,
     type: req.body.type,
     card_number: req.body.card_number || '',
-    account_number: req.body.account_number || ''
+    account_number: req.body.account_number || '',
   };
 
   const statement =
@@ -76,7 +76,7 @@ accountRouter.put('/', function (req, res, next) {
     name: req.body.name,
     type: req.body.type,
     card_number: req.body.card_number,
-    account_number: req.body.account_number
+    account_number: req.body.account_number,
   };
 
   // Make sure id was given
@@ -87,7 +87,7 @@ accountRouter.put('/', function (req, res, next) {
   // Build statement
   var statement = 'UPDATE accounts SET ';
   var hasValues = false;
-  for (const [ key, value ] of Object.entries(props)) {
+  for (const [key, value] of Object.entries(props)) {
     if (value && key !== 'id') {
       statement += key + ' = ${' + key + '}, ';
       hasValues = true;
