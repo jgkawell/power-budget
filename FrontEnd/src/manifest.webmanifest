@@ -1,7 +1,7 @@
 {
   "name": "Power Budget",
   "short_name": "Budget",
-  "theme_color": "#CC0000",
+  "theme_color": "#3780EA",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
