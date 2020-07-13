@@ -1,4 +1,4 @@
-import config from '../config.js';
+import config from './config.js';
 import pgPromise from 'pg-promise';
 
 // Log db connection errors

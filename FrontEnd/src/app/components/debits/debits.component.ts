@@ -15,6 +15,9 @@ export class DebitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.debitService.getDebits().subscribe((debits) => {
+      debits.forEach((current, index, array) => {
+        array[index].postedDate = new Date(current.postedDate);
+      });
       this.debits = debits;
     });
   }
@@ -28,6 +31,7 @@ export class DebitsComponent implements OnInit {
 
   addDebit(debit: Debit) {
     this.debitService.addDebit(debit).subscribe((newDebit) => {
+      newDebit[0].postedDate = new Date(newDebit[0].postedDate);
       this.debits.push(newDebit[0]);
     });
   }

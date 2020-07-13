@@ -8,10 +8,14 @@
   float: right;
 }
 
-.debit {
-  background: #f4f4f4;
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  background-color:#f4f4f4;
+}
+
+th, td {
   padding: 10px;
-  border-bottom: 1px #ccc dotted;
 }
 
 .is-complete {

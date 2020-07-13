@@ -16,6 +16,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "express": "^4.6.1",
+        "js-convert-case": "^4.0.1",
         "pg-promise": "^10.5.7"
     },
     "devDependencies": {

@@ -19,12 +19,12 @@ export class AddDebitComponent implements OnInit {
   onSubmit() {
     const debit: Debit = {
       postedDate: new Date(),
-      amount: 0,
+      amount: 1.99,
       vendor: this.vendor,
-      purpose: 'temp',
-      account: 'temp',
-      budget: 0,
-      notes: 'temp',
+      purpose: 'Groceries',
+      account: 'Checking',
+      budget: 1,
+      notes: 'This is a note',
     };
 
     this.addDebit.emit(debit);
