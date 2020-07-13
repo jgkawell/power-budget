@@ -2,11 +2,14 @@
   display: flex;
 }
 
-.form input[type="text"] {
-  flex: 10;
+.form input[type='text'] {
+  flex: 2;
   padding: 5px;
+  color: #fff;
+  background-color: #101010;
+  border: 1px solid white;
 }
 
-.form input[type="submit"] {
+.form input[type='submit'] {
   flex: 2;
 }
