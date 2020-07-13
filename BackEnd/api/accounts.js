@@ -44,8 +44,8 @@ accountRouter.get('/id', function (req, res, next) {
 // Insert a new account entry into the db
 accountRouter.post('/', function (req, res, next) {
   const props = {
-    name: req.body.name || '',
-    type: req.body.type || '',
+    name: req.body.name,
+    type: req.body.type,
     card_number: req.body.card_number || '',
     account_number: req.body.account_number || ''
   };
@@ -55,6 +55,10 @@ accountRouter.post('/', function (req, res, next) {
     accounts(name, type, card_number, account_number, balance, total_in, total_out) \
     VALUES(${name}, ${type}, ${card_number}, ${account_number}, 0, 0, 0) \
     RETURNING *;';
+
+  if (!props.name || !props.type) {
+    throw new RequestError('name and type are required');
+  }
 
   db.any(statement, props)
     .then((results) => {
@@ -82,13 +86,19 @@ accountRouter.put('/', function (req, res, next) {
 
   // Build statement
   var statement = 'UPDATE accounts SET ';
+  var hasValues = false;
   for (const [ key, value ] of Object.entries(props)) {
     if (value && key !== 'id') {
       statement += key + ' = ${' + key + '}, ';
+      hasValues = true;
     }
   }
   statement = statement.slice(0, -2);
   statement += ' WHERE id = ${id} RETURNING *;';
+
+  if (!hasValues) {
+    throw new RequestError('No values to update');
+  }
 
   db.any(statement, props)
     .then((results) => {

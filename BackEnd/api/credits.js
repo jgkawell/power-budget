@@ -46,10 +46,10 @@ creditRouter.post('/', function (req, res, next) {
   const props = {
     posted_date: req.body.postedDate || new Date(),
     amount: req.body.amount || 0,
-    source: req.body.source || '',
-    purpose: req.body.purpose || '',
-    account: req.body.account || '',
-    budget: req.body.budget || 0,
+    source: req.body.source,
+    purpose: req.body.purpose,
+    account: req.body.account,
+    budget: req.body.budget,
     notes: req.body.notes || '',
   };
 
@@ -58,6 +58,10 @@ creditRouter.post('/', function (req, res, next) {
     credits(posted_date, amount, source, purpose, account, budget, notes) \
     VALUES(${posted_date}, ${amount}, ${source}, ${purpose}, ${account}, ${budget}, ${notes}) \
     RETURNING *;';
+
+  if (!props.source || !props.purpose || !props.account || !props.budget) {
+    throw new RequestError('source, purpose, account, and budget are required');
+  }
 
   // Make sure budget number is valid
   if (!BUDGET_NUMS.includes(parseInt(props.budget))) {

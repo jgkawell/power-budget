@@ -46,10 +46,10 @@ debitRouter.post('/', function (req, res, next) {
   const props = {
     posted_date: req.body.postedDate || new Date(),
     amount: req.body.amount || 0,
-    vendor: req.body.vendor || '',
-    purpose: req.body.purpose || '',
-    account: req.body.account || '',
-    budget: req.body.budget || 0,
+    vendor: req.body.vendor,
+    purpose: req.body.purpose,
+    account: req.body.account,
+    budget: req.body.budget,
     notes: req.body.notes || '',
   };
 
@@ -58,6 +58,10 @@ debitRouter.post('/', function (req, res, next) {
     debits(posted_date, amount, vendor, purpose, account, budget, notes) \
     VALUES(${posted_date}, ${amount}, ${vendor}, ${purpose}, ${account}, ${budget}, ${notes}) \
     RETURNING *;';
+
+  if (!props.vendor || !props.purpose || !props.account || !props.budget) {
+    throw new RequestError('vendor, purpose, account, and budget are required');
+  }
 
   // Make sure budget number is valid
   if (!BUDGET_NUMS.includes(parseInt(props.budget))) {
