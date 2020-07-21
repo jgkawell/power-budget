@@ -2,6 +2,9 @@ dist/
 misc/
 node_modules/
 
+# Firebase
+.firebase
+
 *.crt
 *.key
 

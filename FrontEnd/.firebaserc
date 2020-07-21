@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "power-budget-frontend"
+  },
+  "targets": {
+    "power-budget-frontend": {
+      "hosting": {
+        "main": [
+          "power-budget"
+        ]
+      }
+    }
+  }
+}

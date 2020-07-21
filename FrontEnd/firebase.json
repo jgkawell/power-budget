@@ -1,0 +1,18 @@
+{
+  "hosting": [{
+    "target": "main",
+    "public": "dist/power-budget",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "predeploy":"./angular-env-setup.sh --local"
+  }]
+}
