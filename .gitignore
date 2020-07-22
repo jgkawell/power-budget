@@ -9,6 +9,6 @@ node_modules/
 *.key
 
 .vscode
-.env
+*.env
 
 TODO

@@ -7,8 +7,9 @@ RUN npm install
 COPY . .
 # Create Angular env file
 ARG BACKEND_BASE_URL=${BACKEND_BASE_URL}
+ARG BACKEND_PRODUCTION=${BACKEND_PRODUCTION}
 ARG BACKEND_PORT=${BACKEND_PORT}
-RUN ./angular-env-setup.sh
+RUN ./env-setup.sh
 RUN npm run build
 
 ### STAGE 2: Run ###

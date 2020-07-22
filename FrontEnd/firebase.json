@@ -12,7 +12,6 @@
         "source": "**",
         "destination": "/index.html"
       }
-    ],
-    "predeploy":"./angular-env-setup.sh --local"
+    ]
   }]
 }
