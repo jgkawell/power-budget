@@ -23,6 +23,7 @@ script:
     - cd ../FrontEnd
     - npm install
     - npm run lint
+    - ./env-setup.sh --local
     - npm run build
     - cd ..
     - mv example.env .env
