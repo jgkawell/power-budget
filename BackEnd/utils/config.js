@@ -1,5 +1,6 @@
 export default {
   production: process.env.BACKEND_PRODUCTION,
+  deployed: process.env.BACKEND_DEPLOYED,
   port: process.env.BACKEND_PORT,
   db: {
     host: process.env.DB_HOST,

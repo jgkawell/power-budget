@@ -33,7 +33,7 @@ app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
 });
 
 // If running in prod, use SSL
-if (config.production === 'true') {
+if (config.production && !config.deployed) {
   console.log('Running in prod mode (https)');
   var httpsOptions = {
     key: fs.readFileSync('ssl/server.key'),
