@@ -18,12 +18,12 @@ before_script:
     - npm install -g eslint
 
 script:
+    - mv example.env .env
     - cd ./BackEnd
     - npm run lint
     - cd ../FrontEnd
     - npm install
     - npm run lint
-    - mv example.env .env
     - ./env-setup.sh --local
     - npm run build
     - cd ..
