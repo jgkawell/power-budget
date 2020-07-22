@@ -23,10 +23,10 @@ script:
     - cd ../FrontEnd
     - npm install
     - npm run lint
+    - mv example.env .env
     - ./env-setup.sh --local
     - npm run build
     - cd ..
-    - mv example.env .env
     - docker-compose build
 
 before_deploy:
