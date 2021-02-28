@@ -1,52 +1,52 @@
 version: "2.3"
 services:
-  frontend:
-    image: jgkawell/power-budget-frontend:latest
-    container_name: frontend
+  pb-client:
+    image: jgkawell/power-budget-client:latest
+    container_name: pb-client
     build:
-      context: ./FrontEnd
+      context: ./client
       dockerfile: Dockerfile
       args:
-        - FRONTEND_PORT=${FRONTEND_PORT}
-        - BACKEND_BASE_URL=${BACKEND_BASE_URL}
-        - BACKEND_PORT=${BACKEND_PORT}
+        - CLIENT_PORT=${CLIENT_PORT}
+        - API_BASE_URL=${API_BASE_URL}
+        - API_PORT=${API_PORT}
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-  backend:
-    image: jgkawell/power-budget-backend:latest
-    container_name: backend
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+  pb-api:
+    image: jgkawell/power-budget-api:latest
+    container_name: pb-api
     build:
       context: ./BackEnd
       dockerfile: Dockerfile
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${API_PORT}:${API_PORT}"
     depends_on:
-      database:
+      pb-database:
         condition: service_healthy
     environment:
-      - BACKEND_BASE_URL=${BACKEND_BASE_URL}
-      - BACKEND_PORT=${BACKEND_PORT}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-  database:
+      - API_BASE_URL=${API_BASE_URL}
+      - API_PORT=${API_PORT}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_DATABASE=${DATABASE_DATABASE}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+  pb-database:
     image: jgkawell/power-budget-database:latest
-    container_name: database
+    container_name: pb-database
     build:
-      context: ./Database
+      context: ./database
       dockerfile: Dockerfile
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_DATABASE}
     volumes:
-      - ./Database/pgdata:/var/lib/postgresql/data
+      - ./database/pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
