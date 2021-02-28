@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 
-	"backend/dao"
-	"backend/handler"
-	"backend/tools"
+	"api/dao"
+	"api/handler"
+	"api/tools"
 )
 
 func main() {

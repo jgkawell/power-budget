@@ -4,7 +4,7 @@ import (
 	"os"
 	"strconv"
 
-	"backend/model"
+	"api/model"
 
 	"github.com/sirupsen/logrus"
 )
@@ -18,7 +18,7 @@ func GetConfig() (*logrus.Entry, model.Config) {
 	logger := createLogger()
 
 	// Get the database port from the environment
-	port, err := strconv.ParseUint(getEnv(logger, "DB_PORT"), 10, 16)
+	port, err := strconv.ParseUint(getEnv(logger, "DATABASE_PORT"), 10, 16)
 	if err != nil {
 		logger.WithError(err).Panic("Failed to convert port to uint")
 	}
@@ -27,11 +27,11 @@ func GetConfig() (*logrus.Entry, model.Config) {
 	config := model.Config{
 		Env: getEnv(logger, "ENV"),
 		DatabaseConfig: model.DatabaseConfig{
-			Host:     getEnv(logger, "DB_HOST"),
+			Host:     getEnv(logger, "DATABASE_HOST"),
 			Port:     uint16(port),
-			Database: getEnv(logger, "DB_DATABASE"),
-			User:     getEnv(logger, "DB_USER"),
-			Password: getEnv(logger, "DB_PASSWORD"),
+			Database: getEnv(logger, "DATABASE_DATABASE"),
+			User:     getEnv(logger, "DATABASE_USER"),
+			Password: getEnv(logger, "DATABASE_PASSWORD"),
 		},
 	}
 
@@ -48,6 +48,7 @@ func createLogger() *logrus.Entry {
 	newLogger := createBasicLogger()
 	if env == "dev" {
 		newLogger.SetFormatter(&logrus.TextFormatter{})
+		newLogger.SetReportCaller(true)
 	}
 
 	// Attempt to read log level: default is INFO
@@ -72,7 +73,6 @@ func createBasicLogger() *logrus.Logger {
 	newLogger := logrus.New()
 	newLogger.SetFormatter(&logrus.JSONFormatter{})
 	// TODO: Find out why this is doing func AND file (only want func)
-	newLogger.SetReportCaller(true)
 	newLogger.SetOutput(os.Stdout)
 	newLogger.SetLevel(logrus.InfoLevel)
 

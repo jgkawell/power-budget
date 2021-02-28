@@ -14,7 +14,7 @@ type DatabaseConfig struct {
 }
 
 type Account struct {
-	ID            string  `db:"id"`
+	ID            uint16  `db:"id"`
 	Name          string  `db:"name"`
 	Balance       float32 `db:"balance"`
 	TotalIn       float32 `db:"total_in"`
