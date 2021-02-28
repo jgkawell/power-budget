@@ -2,6 +2,7 @@ dist/
 misc/
 node_modules/
 bin/
+pgdata/
 
 *.crt
 *.key
