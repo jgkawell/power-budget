@@ -1,14 +1,27 @@
 package main
 
 import (
-	"fmt"
+	"context"
 
+	"backend/dao"
 	"backend/handler"
+	"backend/tools"
 )
 
 func main() {
-	fmt.Println("running")
+	// Create logger and config
+	logger, config := tools.GetConfig()
 
-	handler.CreateRestHandler()
+	// Set context for initialization
+	ctx := context.Background()
 
+	logger.Info("starting")
+
+	// Create database
+	db := dao.CreateConnection(logger, config.DatabaseConfig)
+	defer db.Close()
+
+	// Create handlers
+	h := handler.CreateRestHandler(ctx, logger, config, db)
+	h.RunHandler()
 }

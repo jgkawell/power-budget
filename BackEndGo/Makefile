@@ -1,3 +1,7 @@
+# Grab local env values and export for local dev
+include .env
+export
+
 
 lint:
 	go fmt ./...
