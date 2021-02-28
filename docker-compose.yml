@@ -9,7 +9,6 @@ services:
       args:
         - FRONTEND_PORT=${FRONTEND_PORT}
         - BACKEND_BASE_URL=${BACKEND_BASE_URL}
-        - BACKEND_PRODUCTION=${BACKEND_PRODUCTION}
         - BACKEND_PORT=${BACKEND_PORT}
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
@@ -26,7 +25,6 @@ services:
         condition: service_healthy
     environment:
       - BACKEND_BASE_URL=${BACKEND_BASE_URL}
-      - BACKEND_PRODUCTION=${BACKEND_PRODUCTION}
       - BACKEND_PORT=${BACKEND_PORT}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
@@ -50,3 +48,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+# If you're using swag as a reverse proxy
+# networks:
+#   default:
+#     external:
+#       name: swag

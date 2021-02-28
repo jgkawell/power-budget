@@ -19,7 +19,6 @@ COPY ./nginx-conf-setup.sh ./nginx-conf-setup.sh
 COPY ssl/ /etc/nginx/certs
 # Copy over configuration
 COPY nginx/ /etc/nginx/conf.d/
-ARG BACKEND_PRODUCTION=${BACKEND_PRODUCTION}
 RUN ./nginx-conf-setup.sh
 # Edit nginx.conf file
 ARG FRONTEND_PORT=${FRONTEND_PORT}
