@@ -1,5 +1,5 @@
 CREATE TABLE debits (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     posted_date DATE NOT NULL,
     amount NUMERIC(12, 2) NOT NULL,
     vendor TEXT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE debits (
 );
 
 CREATE TABLE credits (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     posted_date DATE NOT NULL,
     amount NUMERIC(12, 2) NOT NULL,
     source TEXT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE credits (
 );
 
 CREATE TABLE accounts (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name TEXT NOT NULL,
     balance NUMERIC(12, 2) NOT NULL,
     total_in NUMERIC(12, 2) NOT NULL,
