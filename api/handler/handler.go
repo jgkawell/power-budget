@@ -21,6 +21,9 @@ type Handler struct {
 func CreateRestHandler(ctx context.Context, logger *logrus.Entry, config model.Config, db dao.DatabaseConnection) Handler {
 
 	// Create gin router
+	if config.Env == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	router := gin.New()
 	router.Use(
 		ginrus(logger),

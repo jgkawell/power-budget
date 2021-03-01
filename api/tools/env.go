@@ -20,7 +20,7 @@ func GetConfig() (*logrus.Entry, model.Config) {
 	// Get the database port from the environment
 	port, err := strconv.ParseUint(getEnv(logger, "DATABASE_PORT"), 10, 16)
 	if err != nil {
-		logger.WithError(err).Panic("Failed to convert port to uint")
+		logger.WithError(err).Fatal("Failed to convert port to uint")
 	}
 
 	// Build config from environment variables
@@ -48,6 +48,7 @@ func createLogger() *logrus.Entry {
 	newLogger := createBasicLogger()
 	if env == "dev" {
 		newLogger.SetFormatter(&logrus.TextFormatter{})
+		// TODO: Find out why this is doing func AND file (only want func)
 		newLogger.SetReportCaller(true)
 	}
 
@@ -62,9 +63,16 @@ func createLogger() *logrus.Entry {
 		logLevel = logrus.InfoLevel
 	}
 
-	// Create final logger entry and return with service field
+	// Attempt to read version
+	version := getEnv(newLogger.WithField("service", serviceName), "VERSION")
+
+	// Create final logger entry and return with unified tagging fields
 	newLogger.SetLevel(logLevel)
-	logger := newLogger.WithField("service", serviceName)
+	logger := newLogger.WithFields(logrus.Fields{
+		"service": serviceName,
+		"env":     env,
+		"version": version,
+	})
 	return logger
 }
 
@@ -72,7 +80,6 @@ func createLogger() *logrus.Entry {
 func createBasicLogger() *logrus.Logger {
 	newLogger := logrus.New()
 	newLogger.SetFormatter(&logrus.JSONFormatter{})
-	// TODO: Find out why this is doing func AND file (only want func)
 	newLogger.SetOutput(os.Stdout)
 	newLogger.SetLevel(logrus.InfoLevel)
 
@@ -80,11 +87,11 @@ func createBasicLogger() *logrus.Logger {
 }
 
 // getEnv attempts to retreive the value of an environment variable
-// from the OS and panics if not found
+// from the OS and fatals if not found
 func getEnv(logger *logrus.Entry, key string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {
-		logger.WithField("key", key).Panic("Required environment variable not found for key")
+		logger.WithField("key", key).Fatal("Required environment variable not found for key")
 	}
 	return value
 }
