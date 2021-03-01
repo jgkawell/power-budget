@@ -22,12 +22,18 @@ func (h Handler) CreateAccount(ctx *gin.Context) {
 
 	// Call dao layer
 	// TODO: Need to call service layer
-	createdAccount := h.db.CreateAccount(ctx, logger, newAccount)
-	logger.Info(createdAccount)
-
-	ctx.JSON(200, gin.H{
-		"account": createdAccount,
-	})
+	createdAccount, err := h.db.CreateAccount(ctx, logger, newAccount)
+	if err != nil {
+		logger.WithError(err).Error("Failed to create account")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
+		})
+	} else {
+		ctx.JSON(200, gin.H{
+			"msg":     "succeeded",
+			"account": createdAccount,
+		})
+	}
 }
 
 func (h Handler) ReadAccount(ctx *gin.Context) {
@@ -48,7 +54,6 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 
 	// TODO: Pull this from the request
 	newAccount := model.Account{
-		ID:            3,
 		Name:          "NEW NAME",
 		Balance:       3.34,
 		TotalIn:       0.55,
@@ -60,12 +65,18 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 
 	// Call dao layer
 	// TODO: Need to call service layer
-	updatedAccount := h.db.UpdateAccount(ctx, logger, newAccount)
-	logger.Info(updatedAccount)
-
-	ctx.JSON(200, gin.H{
-		"account": updatedAccount,
-	})
+	updatedAccount, err := h.db.UpdateAccount(ctx, logger, newAccount)
+	if err != nil {
+		logger.WithError(err).Error("Failed to update account")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
+		})
+	} else {
+		ctx.JSON(200, gin.H{
+			"msg":     "succeeded",
+			"account": updatedAccount,
+		})
+	}
 }
 
 func (h Handler) DeleteAccount(ctx *gin.Context) {
@@ -73,7 +84,7 @@ func (h Handler) DeleteAccount(ctx *gin.Context) {
 
 	// Call dao layer
 	// TODO: Need to call service layer
-	deletedAccount := h.db.DeleteAccount(ctx, logger, 4)
+	deletedAccount := h.db.DeleteAccount(ctx, logger, "dbc23cf1-6503-4996-bbe0-ffb569995639")
 	logger.Info(deletedAccount)
 
 	ctx.JSON(200, gin.H{

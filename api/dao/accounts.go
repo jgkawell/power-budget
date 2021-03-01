@@ -5,11 +5,14 @@ import (
 
 	"api/model"
 
+	"github.com/google/uuid"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
 const create = `
 	INSERT INTO accounts(
+		id,
 		name,
 		balance,
 		total_in,
@@ -18,13 +21,14 @@ const create = `
 		card_number,
 		account_number)
 	VALUES(
+		:id,
 		:name,
-		:type,
-		:card_number,
-		:account_number,
 		:balance,
 		:total_in,
-		:total_out)
+		:total_out,
+		:type,
+		:card_number,
+		:account_number)
 	RETURNING *;`
 
 const read = `
@@ -47,33 +51,20 @@ const delete = `
 	DELETE FROM accounts
 	WHERE id = $1;`
 
-// CreateAccount creates an account in the database and returns the result
-func (conn connection) CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) model.Account {
+// CreateAccount creates an account in the database and returns the id if succeeded
+func (conn connection) CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
 
-	// Run named query insert
-	rows, err := conn.db.NamedQuery(create, account)
+	// Set the ID as a new UUID
+	account.ID = uuid.New().String()
+
+	// Attempt generic create
+	rows, err := conn.NamedQuery(ctx, logger, create, account)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
-		return model.Account{}
+		logger.WithError(err).Error("Failed to create account")
+		return model.Account{}, err
 	}
 
-	// Attempt to get next result
-	next := rows.Next()
-	if !next {
-		logger.Error("Create returned no result")
-		return model.Account{}
-	}
-
-	// Read out row into account struct
-	var createdAccount model.Account
-	err = rows.StructScan(&createdAccount)
-	if err != nil {
-		logger.WithError(err).Error("Failed to scan struct from rows")
-	}
-
-	// Return result
-	logger.Info("Create succeeded")
-	return createdAccount
+	return buildAccountFromRows(logger, rows)
 }
 
 // ReadAccount reads an account by id
@@ -93,36 +84,20 @@ func (conn connection) ReadAccount(ctx context.Context, logger *logrus.Entry, id
 }
 
 // ReadAccount reads an account by id
-func (conn connection) UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) model.Account {
+func (conn connection) UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
 
-	// Run named query update
-	rows, err := conn.db.NamedQuery(update, account)
+	// Attempt generic update
+	rows, err := conn.NamedQuery(ctx, logger, update, account)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
-		return model.Account{}
+		logger.WithError(err).Error("Failed to update account")
+		return model.Account{}, err
 	}
 
-	// Attempt to get next result
-	next := rows.Next()
-	if !next {
-		logger.Error("Update returned no result")
-		return model.Account{}
-	}
-
-	// Read out row into account struct
-	var updatedAccount model.Account
-	err = rows.StructScan(&updatedAccount)
-	if err != nil {
-		logger.WithError(err).Error("Failed to scan struct from rows")
-	}
-
-	// Return result
-	logger.Info("Update succeeded")
-	return updatedAccount
+	return buildAccountFromRows(logger, rows)
 }
 
 // DeleteAccount deletes an account by id
-func (conn connection) DeleteAccount(ctx context.Context, logger *logrus.Entry, id uint16) bool {
+func (conn connection) DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) bool {
 	logger = logger.WithField("account_id", id)
 
 	// Run delete query
@@ -152,4 +127,16 @@ func (conn connection) DeleteAccount(ctx context.Context, logger *logrus.Entry, 
 	// Return result
 	logger.WithError(err).Error("Delete failed")
 	return false
+}
+
+func buildAccountFromRows(logger *logrus.Entry, rows *sqlx.Rows) (model.Account, error) {
+	// Read out row into account struct
+	var account model.Account
+	err := rows.StructScan(&account)
+	if err != nil {
+		logger.WithError(err).Error("Failed to scan struct from rows")
+		return model.Account{}, err
+	}
+	// Return result
+	return account, nil
 }

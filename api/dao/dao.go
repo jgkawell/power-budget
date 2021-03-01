@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"api/model"
@@ -12,12 +13,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const noResultErrorMsg = "Query operation returned no result"
+
 type DatabaseConnection interface {
 	// CRUD for accounts
-	CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) model.Account
+	CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error)
 	ReadAccount(ctx context.Context, logger *logrus.Entry, id uint16) model.Account
-	UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) model.Account
-	DeleteAccount(ctx context.Context, logger *logrus.Entry, id uint16) bool
+	UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error)
+	DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) bool
 
 	// Helpers
 	Close()
@@ -44,7 +47,7 @@ func CreateConnection(logger *logrus.Entry, config model.DatabaseConfig) Databas
 		AcquireTimeout: 30 * time.Second,
 	})
 	if err != nil {
-		logger.WithError(err).Panic("Call to pgx.NewConnPool failed")
+		logger.WithError(err).Fatal("Call to pgx.NewConnPool failed")
 	}
 
 	// Then set up sqlx and return the created DB reference
@@ -57,7 +60,28 @@ func CreateConnection(logger *logrus.Entry, config model.DatabaseConfig) Databas
 	return conn
 }
 
-// Close closses the database connection pool
+// Close closes the database connection pool
 func (conn connection) Close() {
 	conn.db.Close()
+}
+
+// Executes a named query in the database using given SQL and object
+func (conn connection) NamedQuery(ctx context.Context, logger *logrus.Entry, sql string, object interface{}) (*sqlx.Rows, error) {
+	// Run query
+	rows, err := conn.db.NamedQuery(sql, object)
+	if err != nil {
+		logger.WithError(err).Error("Error executing named query")
+		return nil, err
+	}
+
+	// Attempt to get next result
+	next := rows.Next()
+	if !next {
+		logger.Error(noResultErrorMsg)
+		return nil, fmt.Errorf(noResultErrorMsg)
+	}
+
+	// Return result
+	logger.Debug("Succeeded executing named query")
+	return rows, nil
 }
