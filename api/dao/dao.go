@@ -18,9 +18,9 @@ const noResultErrorMsg = "Query operation returned no result. Was the ID not in 
 type DatabaseConnection interface {
 	// CRUD for accounts
 	CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error)
-	ReadAccount(ctx context.Context, logger *logrus.Entry, id uint16) model.Account
+	ReadAccount(ctx context.Context, logger *logrus.Entry, id string) (model.Account, error)
 	UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error)
-	DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) bool
+	DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) (model.Account, error)
 
 	// Helpers
 	Close()
@@ -67,12 +67,15 @@ func (conn connection) Close() {
 
 // Executes a named query in the database using given SQL and entry
 // Params:
+//
 // - sql = the (formatted) sql statement to execute
 // - entry = the entry with fields to substitute into the sql statement
+// - desiredType = a struct with the type that the DB result will be converted to
+//
 // Returns:
-// - interface{} = the result of the query but needs to be converted back to original type
-// - error = error if occured
-func (conn connection) genericNamedQuery(ctx context.Context, logger *logrus.Entry, sql string, entry interface{}, result interface{}) (interface{}, error) {
+// - interface{} = the result of the query but needs to be converted to specific type (desiredType)
+// - error = not nil error if occured
+func (conn connection) genericNamedQuery(ctx context.Context, logger *logrus.Entry, sql string, entry interface{}, desiredType interface{}) (interface{}, error) {
 	// Run query
 	rows, err := conn.db.NamedQuery(sql, entry)
 	if err != nil {
@@ -89,56 +92,25 @@ func (conn connection) genericNamedQuery(ctx context.Context, logger *logrus.Ent
 	}
 
 	// Convert to model struct from interface
-	switch v := result.(type) {
+	switch t := desiredType.(type) {
 	case model.Account:
-		logger.WithField("type", v).Debug("Converting to account")
+		logger.WithField("type", t).Debug("Converting to account")
 		var convertedResult model.Account
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	case model.Config:
-		logger.WithField("type", v).Debug("Converting to config")
+		logger.WithField("type", t).Debug("Converting to config")
 		var convertedResult model.Config
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	case model.DatabaseConfig:
-		logger.WithField("type", v).Debug("Converting to database config")
+		logger.WithField("type", t).Debug("Converting to database config")
 		var convertedResult model.DatabaseConfig
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	default:
 		err := fmt.Errorf("unsupported type")
-		logger.WithField("type", v).WithError(err).Error("unsupported type")
-		return result, err
+		logger.WithField("type", t).WithError(err).Error("unsupported type")
+		return desiredType, err
 	}
-}
-
-// genericDelete deletes any record from the database with given sql and id
-func (conn connection) genericDelete(ctx context.Context, logger *logrus.Entry, sql string, id string) bool {
-	// Run delete query
-	result, err := conn.db.Exec(sql, id)
-	if err == nil {
-		count, err := result.RowsAffected()
-		if err == nil {
-			countLogger := logger.WithField("count", count)
-			if count == 1 {
-				countLogger.Info("Delete succeeded")
-				return true
-			} else if count > 1 {
-				countLogger.Warn("Deleted multiple records with single ID. Records should not have duplicate IDs.")
-				return true
-			} else if count == 0 {
-				countLogger.Warn("Nothing was deleted. Was the ID not in the DB?")
-				return false
-			} else {
-				countLogger.Error("Look at count field. This should never happen.")
-				return false
-			}
-		}
-		logger.WithError(err).Error("Failed to get count")
-		return false
-	}
-
-	// Return result
-	logger.WithError(err).Error("Delete failed")
-	return false
 }

@@ -33,7 +33,7 @@ const create = `
 const read = `
 	SELECT *
 	FROM accounts
-	WHERE id = $1;`
+	WHERE id = :id;`
 
 const update = `
 	UPDATE accounts
@@ -44,67 +44,88 @@ const update = `
 		type = :type,
 		card_number = :card_number,
 		account_number = :account_number
-	WHERE id = :id;`
+	WHERE id = :id
+	RETURNING *;`
 
 const delete = `
 	DELETE FROM accounts
-	WHERE id = $1;`
+	WHERE id = :id
+	RETURNING *;`
 
 // CreateAccount creates an account in the database and returns the id if succeeded
 func (conn connection) CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
-
 	// Set the ID as a new UUID
 	account.ID = uuid.New().String()
+	logger = logger.WithField("account_id", account.ID)
 
 	// Attempt generic create
-	var result model.Account
-	newAccount, err := conn.genericNamedQuery(ctx, logger, create, account, result)
+	var desiredType model.Account
+	result, err := conn.genericNamedQuery(ctx, logger, create, account, desiredType)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create account")
 		return model.Account{}, err
 	}
 
 	// Cast a return
-	result = newAccount.(model.Account)
-	return result, nil
+	logger.Info("Created account")
+	return result.(model.Account), nil
 }
 
 // ReadAccount reads an account by id
-func (conn connection) ReadAccount(ctx context.Context, logger *logrus.Entry, id uint16) model.Account {
+func (conn connection) ReadAccount(ctx context.Context, logger *logrus.Entry, id string) (model.Account, error) {
+	logger = logger.WithField("account_id", id)
 
-	// Run read query
-	var readAccount model.Account
-	err := conn.db.Get(&readAccount, read, id)
-	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
-		return model.Account{}
+	// Create account with id to read
+	account := model.Account{
+		ID: id,
 	}
 
-	// Return result
-	logger.Info("Read succeeded")
-	return readAccount
+	var desiredType model.Account
+	result, err := conn.genericNamedQuery(ctx, logger, read, account, desiredType)
+	if err != nil {
+		logger.WithError(err).Error("Failed to query row")
+		return model.Account{}, err
+	}
+
+	// Cast and return
+	logger.Info("Read account")
+	return result.(model.Account), nil
 }
 
 // ReadAccount reads an account by id
 func (conn connection) UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
+	logger = logger.WithField("account_id", account.ID)
 
 	// Attempt generic update
-	var result model.Account
-	updatedAccount, err := conn.genericNamedQuery(ctx, logger, update, account, result)
+	var desiredType model.Account
+	result, err := conn.genericNamedQuery(ctx, logger, update, account, desiredType)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update account")
 		return model.Account{}, err
 	}
 
 	// Cast and return
-	result = updatedAccount.(model.Account)
-	return result, nil
+	logger.Info("Updated account")
+	return result.(model.Account), nil
 }
 
 // DeleteAccount deletes an account by id
-func (conn connection) DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) bool {
+func (conn connection) DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) (model.Account, error) {
 	logger = logger.WithField("account_id", id)
 
-	// Run delete query
-	return conn.genericDelete(ctx, logger, delete, id)
+	// Create account with id to delete
+	account := model.Account{
+		ID: id,
+	}
+
+	var desiredType model.Account
+	result, err := conn.genericNamedQuery(ctx, logger, delete, account, desiredType)
+	if err != nil {
+		logger.WithError(err).Error("Failed to query row")
+		return model.Account{}, err
+	}
+
+	// Cast and return
+	logger.Info("Deleted account")
+	return result.(model.Account), nil
 }

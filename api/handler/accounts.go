@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const testID = "997b2669-313c-4b20-b2c8-172aed36f4a6"
+
 func (h Handler) CreateAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "CreateAccount")
 
@@ -41,12 +43,18 @@ func (h Handler) ReadAccount(ctx *gin.Context) {
 
 	// Call dao layer
 	// TODO: Need to call service layer
-	readAccount := h.db.ReadAccount(ctx, logger, 1)
-	logger.Info(readAccount)
-
-	ctx.JSON(200, gin.H{
-		"account": readAccount,
-	})
+	readAccount, err := h.db.ReadAccount(ctx, logger, testID)
+	if err != nil {
+		logger.WithError(err).Error("Failed to delete account")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
+		})
+	} else {
+		ctx.JSON(200, gin.H{
+			"msg":     "succeeded",
+			"account": readAccount,
+		})
+	}
 }
 
 func (h Handler) UpdateAccount(ctx *gin.Context) {
@@ -54,6 +62,7 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 
 	// TODO: Pull this from the request
 	newAccount := model.Account{
+		ID:            testID,
 		Name:          "NEW NAME",
 		Balance:       3.34,
 		TotalIn:       0.55,
@@ -84,10 +93,16 @@ func (h Handler) DeleteAccount(ctx *gin.Context) {
 
 	// Call dao layer
 	// TODO: Need to call service layer
-	deletedAccount := h.db.DeleteAccount(ctx, logger, "dbc23cf1-6503-4996-bbe0-ffb569995639")
-	logger.Info(deletedAccount)
-
-	ctx.JSON(200, gin.H{
-		"msg": deletedAccount,
-	})
+	deletedAccount, err := h.db.DeleteAccount(ctx, logger, testID)
+	if err != nil {
+		logger.WithError(err).Error("Failed to delete account")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
+		})
+	} else {
+		ctx.JSON(200, gin.H{
+			"msg":     "succeeded",
+			"account": deletedAccount,
+		})
+	}
 }
