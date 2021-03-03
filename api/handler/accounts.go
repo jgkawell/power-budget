@@ -8,6 +8,7 @@ import (
 
 const testID = "997b2669-313c-4b20-b2c8-172aed36f4a6"
 
+// CreateAccount creates an account in the database
 func (h Handler) CreateAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "CreateAccount")
 
@@ -38,6 +39,7 @@ func (h Handler) CreateAccount(ctx *gin.Context) {
 	}
 }
 
+// ReadAccount reads an account from the database with given id
 func (h Handler) ReadAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "ReadAccount")
 
@@ -57,6 +59,7 @@ func (h Handler) ReadAccount(ctx *gin.Context) {
 	}
 }
 
+// UpdateAccount updates an account in the database with given parameters (id required)
 func (h Handler) UpdateAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "UpdateAccount")
 
@@ -88,6 +91,7 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 	}
 }
 
+// DeleteAccount deletes an account in the database with given id
 func (h Handler) DeleteAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "DeleteAccount")
 

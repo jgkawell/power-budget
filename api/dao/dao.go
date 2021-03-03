@@ -68,9 +68,9 @@ func (conn connection) Close() {
 // Executes a named query in the database using given SQL and entry
 // Params:
 //
-// - sql = the (formatted) sql statement to execute
-// - entry = the entry with fields to substitute into the sql statement
-// - desiredType = a struct with the type that the DB result will be converted to
+// - sql string = the (formatted) sql statement to execute
+// - entry interface{} = the entry with fields to substitute into the sql statement
+// - desiredType interface{} = a struct with the (real) type that the DB result will be converted to
 //
 // Returns:
 // - interface{} = the result of the query but needs to be converted to specific type (desiredType)
@@ -99,11 +99,13 @@ func (conn connection) genericNamedQuery(ctx context.Context, logger *logrus.Ent
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	case model.Config:
+		// TODO: This is temporary, will be replaced with real DB models
 		logger.WithField("type", t).Debug("Converting to config")
 		var convertedResult model.Config
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	case model.DatabaseConfig:
+		// TODO: This is temporary, will be replaced with real DB models
 		logger.WithField("type", t).Debug("Converting to database config")
 		var convertedResult model.DatabaseConfig
 		err = rows.StructScan(&convertedResult)

@@ -52,7 +52,7 @@ const delete = `
 	WHERE id = :id
 	RETURNING *;`
 
-// CreateAccount creates an account in the database and returns the id if succeeded
+// CreateAccount creates an account in the database
 func (conn connection) CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
 	// Set the ID as a new UUID
 	account.ID = uuid.New().String()
@@ -92,7 +92,8 @@ func (conn connection) ReadAccount(ctx context.Context, logger *logrus.Entry, id
 	return result.(model.Account), nil
 }
 
-// ReadAccount reads an account by id
+// UpdateAccount updates an account by id with values provided in the struct
+// TODO: What happens if all values are not provided? (e.g. Ares TEXT fields set to "" in the DB?)
 func (conn connection) UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
 	logger = logger.WithField("account_id", account.ID)
 
