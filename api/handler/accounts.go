@@ -88,6 +88,6 @@ func (h Handler) DeleteAccount(ctx *gin.Context) {
 	logger.Info(deletedAccount)
 
 	ctx.JSON(200, gin.H{
-		"account": deletedAccount,
+		"msg": deletedAccount,
 	})
 }

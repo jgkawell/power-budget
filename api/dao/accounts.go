@@ -6,7 +6,6 @@ import (
 	"api/model"
 
 	"github.com/google/uuid"
-	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -58,13 +57,16 @@ func (conn connection) CreateAccount(ctx context.Context, logger *logrus.Entry, 
 	account.ID = uuid.New().String()
 
 	// Attempt generic create
-	rows, err := conn.NamedQuery(ctx, logger, create, account)
+	var result model.Account
+	newAccount, err := conn.genericNamedQuery(ctx, logger, create, account, result)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create account")
 		return model.Account{}, err
 	}
 
-	return buildAccountFromRows(logger, rows)
+	// Cast a return
+	result = newAccount.(model.Account)
+	return result, nil
 }
 
 // ReadAccount reads an account by id
@@ -87,13 +89,16 @@ func (conn connection) ReadAccount(ctx context.Context, logger *logrus.Entry, id
 func (conn connection) UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error) {
 
 	// Attempt generic update
-	rows, err := conn.NamedQuery(ctx, logger, update, account)
+	var result model.Account
+	updatedAccount, err := conn.genericNamedQuery(ctx, logger, update, account, result)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update account")
 		return model.Account{}, err
 	}
 
-	return buildAccountFromRows(logger, rows)
+	// Cast and return
+	result = updatedAccount.(model.Account)
+	return result, nil
 }
 
 // DeleteAccount deletes an account by id
@@ -101,42 +106,5 @@ func (conn connection) DeleteAccount(ctx context.Context, logger *logrus.Entry, 
 	logger = logger.WithField("account_id", id)
 
 	// Run delete query
-	rows, err := conn.db.Exec(delete, id)
-	if err == nil {
-		count, err := rows.RowsAffected()
-		if err == nil {
-			countLogger := logger.WithField("count", count)
-			if count == 1 {
-				countLogger.Info("Delete succeeded")
-				return true
-			} else if count > 1 {
-				countLogger.Warn("Deleted multiple records with single ID. Records should not have duplicate IDs.")
-				return true
-			} else if count == 0 {
-				countLogger.Debug("Nothing was deleted. Was the ID not in the DB?")
-				return false
-			} else {
-				countLogger.Error("Look at count field. This should never happen.")
-				return false
-			}
-		}
-		logger.WithError(err).Error("Failed to get count")
-		return false
-	}
-
-	// Return result
-	logger.WithError(err).Error("Delete failed")
-	return false
-}
-
-func buildAccountFromRows(logger *logrus.Entry, rows *sqlx.Rows) (model.Account, error) {
-	// Read out row into account struct
-	var account model.Account
-	err := rows.StructScan(&account)
-	if err != nil {
-		logger.WithError(err).Error("Failed to scan struct from rows")
-		return model.Account{}, err
-	}
-	// Return result
-	return account, nil
+	return conn.genericDelete(ctx, logger, delete, id)
 }
