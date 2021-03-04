@@ -1,10 +1,12 @@
 package model
 
+// Config contains config values for the api service
 type Config struct {
 	Env            string
 	DatabaseConfig DatabaseConfig
 }
 
+// DatabaseConfig holds connection info for PostgreSQL database
 type DatabaseConfig struct {
 	Host     string
 	Port     uint16
@@ -13,49 +15,7 @@ type DatabaseConfig struct {
 	Password string
 }
 
-// ACCOUNT
-
-const CreateAccount = `
-	INSERT INTO accounts(
-		id,
-		name,
-		balance,
-		total_in,
-		total_out,
-		type,
-		card_number,
-		account_number)
-	VALUES(
-		:id,
-		:name,
-		:balance,
-		:total_in,
-		:total_out,
-		:type,
-		:card_number,
-		:account_number)
-	RETURNING *;`
-
-const ReadAccount = `
-	SELECT *
-	FROM accounts
-	WHERE id = $1;`
-
-const UpdateAccount = `
-	UPDATE accounts
-	SET name = :name,
-		balance = :balance,
-		total_in = :total_in,
-		total_out = :total_out,
-		type = :type,
-		card_number = :card_number,
-		account_number = :account_number
-	WHERE id = :id;`
-
-const DeleteAccount = `
-	DELETE FROM accounts
-	WHERE id = $1;`
-
+// Account defines an account in the database
 type Account struct {
 	ID            string  `db:"id"`
 	Name          string  `db:"name"`

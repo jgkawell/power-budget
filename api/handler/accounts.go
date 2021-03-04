@@ -1,19 +1,19 @@
 package handler
 
 import (
-	"api/model"
+	m "api/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-const testID = "997b2669-313c-4b20-b2c8-172aed36f4a6"
+const testID = "c06d9a84-bf80-4b5e-a033-a5df8b3f1469"
 
 // CreateAccount creates an account in the database
 func (h Handler) CreateAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "CreateAccount")
 
 	// TODO: Pull this from the request
-	newAccount := model.Account{
+	newAccount := m.Account{
 		Name:          "Chase Debit 4",
 		Balance:       4392.34,
 		TotalIn:       34.55,
@@ -24,8 +24,7 @@ func (h Handler) CreateAccount(ctx *gin.Context) {
 	}
 
 	// Call dao layer
-	// TODO: Need to call service layer
-	createdAccount, err := h.db.CreateAccount(ctx, logger, newAccount)
+	createdAccount, err := h.service.Accounts().CreateAccount(ctx, logger, newAccount)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create account")
 		ctx.JSON(500, gin.H{
@@ -44,10 +43,9 @@ func (h Handler) ReadAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "ReadAccount")
 
 	// Call dao layer
-	// TODO: Need to call service layer
-	readAccount, err := h.db.ReadAccount(ctx, logger, testID)
+	readAccount, err := h.service.Accounts().ReadAccount(ctx, logger, testID)
 	if err != nil {
-		logger.WithError(err).Error("Failed to delete account")
+		logger.WithError(err).Error("Failed to read account")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
@@ -64,7 +62,7 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "UpdateAccount")
 
 	// TODO: Pull this from the request
-	newAccount := model.Account{
+	newAccount := m.Account{
 		ID:            testID,
 		Name:          "NEW NAME",
 		Balance:       3.34,
@@ -76,8 +74,7 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 	}
 
 	// Call dao layer
-	// TODO: Need to call service layer
-	updatedAccount, err := h.db.UpdateAccount(ctx, logger, newAccount)
+	updatedAccount, err := h.service.Accounts().UpdateAccount(ctx, logger, newAccount)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update account")
 		ctx.JSON(500, gin.H{
@@ -96,8 +93,7 @@ func (h Handler) DeleteAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "DeleteAccount")
 
 	// Call dao layer
-	// TODO: Need to call service layer
-	deletedAccount, err := h.db.DeleteAccount(ctx, logger, testID)
+	deletedAccount, err := h.service.Accounts().DeleteAccount(ctx, logger, testID)
 	if err != nil {
 		logger.WithError(err).Error("Failed to delete account")
 		ctx.JSON(500, gin.H{

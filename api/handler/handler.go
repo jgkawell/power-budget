@@ -4,21 +4,22 @@ import (
 	"context"
 	"time"
 
-	"api/dao"
-	"api/model"
+	m "api/model"
+	s "api/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
+// Handler is the struct for managing all incoming client requests
 type Handler struct {
-	logger *logrus.Entry
-	db     dao.DatabaseConnection
-	router *gin.Engine
+	logger  *logrus.Entry
+	router  *gin.Engine
+	service s.MetaService
 }
 
-// CreateRestHandler returns a new gin rest handler
-func CreateRestHandler(ctx context.Context, logger *logrus.Entry, config model.Config, db dao.DatabaseConnection) Handler {
+// CreateHandler returns a new gin rest handler
+func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, service s.MetaService) Handler {
 
 	// Create gin router
 	if config.Env == "prod" {
@@ -32,9 +33,9 @@ func CreateRestHandler(ctx context.Context, logger *logrus.Entry, config model.C
 
 	// Create handler
 	h := Handler{
-		logger: logger,
-		db:     db,
-		router: router,
+		logger:  logger,
+		router:  router,
+		service: service,
 	}
 
 	// Setup routes
@@ -46,6 +47,7 @@ func CreateRestHandler(ctx context.Context, logger *logrus.Entry, config model.C
 	return h
 }
 
+// RunHandler starts the handler server
 func (h Handler) RunHandler() {
 	h.router.Run()
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"api/model"
+	m "api/model"
 
 	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/stdlib"
@@ -15,23 +15,19 @@ import (
 
 const noResultErrorMsg = "Query operation returned no result. Was the ID not in the database?"
 
-type DatabaseConnection interface {
-	// CRUD for accounts
-	CreateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error)
-	ReadAccount(ctx context.Context, logger *logrus.Entry, id string) (model.Account, error)
-	UpdateAccount(ctx context.Context, logger *logrus.Entry, account model.Account) (model.Account, error)
-	DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) (model.Account, error)
-
-	// Helpers
+// MetaDao is the wrapper dao around the sub-daos for specific tables
+type MetaDao interface {
+	Accounts() AccountsDao
 	Close()
 }
 
-type connection struct {
-	db *sqlx.DB
+type metaDao struct {
+	db       *sqlx.DB
+	accounts AccountsDao
 }
 
-// CreateConnection returns a sqlx db that uses a pgx connection pool
-func CreateConnection(logger *logrus.Entry, config model.DatabaseConfig) DatabaseConnection {
+// CreateDao returns a sqlx db that uses a pgx connection pool
+func CreateDao(logger *logrus.Entry, config m.DatabaseConfig) MetaDao {
 	// First set up the pgx connection pool
 	connConfig := pgx.ConnConfig{
 		Host:     config.Host,
@@ -52,32 +48,42 @@ func CreateConnection(logger *logrus.Entry, config model.DatabaseConfig) Databas
 
 	// Then set up sqlx and return the created DB reference
 	nativeDB := stdlib.OpenDBFromPool(connPool)
+	db := sqlx.NewDb(nativeDB, "pgx")
 
-	conn := connection{
-		db: sqlx.NewDb(nativeDB, "pgx"),
+	conn := metaDao{
+		db:       db,
+		accounts: NewAccountsDao(db),
 	}
 
 	return conn
 }
 
-// Close closes the database connection pool
-func (conn connection) Close() {
-	conn.db.Close()
+// Accounts returns the accounts sub-dao of the meta dao
+func (d metaDao) Accounts() AccountsDao {
+	return d.accounts
 }
 
-// Executes a named query in the database using given SQL and entry
+// Close closes the database connection pool
+func (d metaDao) Close() {
+	d.db.Close()
+}
+
+// genericNamedQuery a named query in the database using given SQL and entry
 // Params:
 //
+// - db *sqlx.DB = the db connection to execute the query against
 // - sql string = the (formatted) sql statement to execute
 // - entry interface{} = the entry with fields to substitute into the sql statement
 // - desiredType interface{} = a struct with the (real) type that the DB result will be converted to
 //
 // Returns:
+//
 // - interface{} = the result of the query but needs to be converted to specific type (desiredType)
 // - error = not nil error if occured
-func (conn connection) genericNamedQuery(ctx context.Context, logger *logrus.Entry, sql string, entry interface{}, desiredType interface{}) (interface{}, error) {
+//
+func genericNamedQuery(ctx context.Context, logger *logrus.Entry, db *sqlx.DB, sql string, entry interface{}, desiredType interface{}) (interface{}, error) {
 	// Run query
-	rows, err := conn.db.NamedQuery(sql, entry)
+	rows, err := db.NamedQuery(sql, entry)
 	if err != nil {
 		logger.WithError(err).Error("Error executing named query")
 		return nil, err
@@ -93,21 +99,21 @@ func (conn connection) genericNamedQuery(ctx context.Context, logger *logrus.Ent
 
 	// Convert to model struct from interface
 	switch t := desiredType.(type) {
-	case model.Account:
+	case m.Account:
 		logger.WithField("type", t).Debug("Converting to account")
-		var convertedResult model.Account
+		var convertedResult m.Account
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
-	case model.Config:
+	case m.Config:
 		// TODO: This is temporary, will be replaced with real DB models
 		logger.WithField("type", t).Debug("Converting to config")
-		var convertedResult model.Config
+		var convertedResult m.Config
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
-	case model.DatabaseConfig:
+	case m.DatabaseConfig:
 		// TODO: This is temporary, will be replaced with real DB models
 		logger.WithField("type", t).Debug("Converting to database config")
-		var convertedResult model.DatabaseConfig
+		var convertedResult m.DatabaseConfig
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	default:
