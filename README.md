@@ -2,14 +2,28 @@
 
 # power-budget
 
-A powerful budgeting PWA written in Angular.
+A powerful budgeting PWA served by a locally hosted API and database:
 
-- FrontEnd is Angular
-- BackEnd is Node.js connected to Postgres DB
+- Client is Angular
+- API is Golang
+- Database is Postgres DB
+
+**This is still very early days for this project. I welcome feedback (in the form of issues) or PRs if you want to contribute.**
+
+This application will one day replace the (quite extensive) Excel spreadsheet I use to keep track of my personal finances. It should eventually have many (or more) of the below features:
+
+- Debit/credit transaction tracking
+- Budgeting categories
+- Charts/graphs of spending and saving habits
+- Import/export of data to CSV
+- Financial account management
+- Others?
+
+This project is meant to be hosted locally to avoid the issues of security/privacy. This would mean connecting to it on your local network *only* which is the safest way to go about it. It will also be possible to host it locally using a reverse-proxy, dynamic DNS, and router port-forwarding to make it accessible everywhere. Instructions on how to do all this will be made later down the road.
 
 # Installation
 
-The installation is fairly straightforward since everything is set up in docker-compose. First, you'll need [Docker](https://docs.docker.com/get-docker/) installed on your machine. Then can run the below commands:
+The installation is fairly straightforward since everything is set up in docker-compose. First, you'll need [Docker](https://docs.docker.com/get-docker/) installed on your machine. Then you can run the below commands:
 
 ```bash
 git clone https://github.com/jgkawell/power-budget.git
