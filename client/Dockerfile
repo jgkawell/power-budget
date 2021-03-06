@@ -7,10 +7,7 @@ COPY package.json ./
 RUN npm install
 COPY . .
 
-# Create Angular env file
-ARG API_BASE_URL=${API_BASE_URL}
-ARG API_PORT=${API_PORT}
-RUN ./angular-env-setup.sh
+# Build Angular app
 RUN npm run build
 
 ### STAGE 2: Run ###
@@ -19,7 +16,3 @@ COPY --from=build /app/dist/power-budget /usr/share/nginx/html
 
 # Copy over configuration
 COPY nginx/ /etc/nginx/conf.d/
-
-# Edit nginx.conf file
-ARG CLIENT_PORT=${CLIENT_PORT}
-RUN sed -i "s/change_me/$CLIENT_PORT/g" /etc/nginx/conf.d/nginx.conf
