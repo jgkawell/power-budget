@@ -1,6 +1,6 @@
-version: "2.3"
+version: "3"
 services:
-  pb-client:
+  client:
     image: jgkawell/power-budget-client:latest
     container_name: pb-client
     build:
@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 4200:4200
-  pb-api:
+  api:
     image: jgkawell/power-budget-api:latest
     container_name: pb-api
     build:
@@ -16,9 +16,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "${API_PORT}:${API_PORT}"
-    depends_on:
-      pb-database:
-        condition: service_healthy
     environment:
       - API_BASE_URL=${API_BASE_URL}
       - API_PORT=${API_PORT}
@@ -27,7 +24,7 @@ services:
       - DATABASE_DATABASE=${DATABASE_DATABASE}
       - DATABASE_USER=${DATABASE_USER}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-  pb-database:
+  database:
     image: jgkawell/power-budget-database:latest
     container_name: pb-database
     build:
@@ -41,11 +38,6 @@ services:
       - POSTGRES_DB=${DATABASE_DATABASE}
     volumes:
       - ./database/pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 # If you're using swag as a reverse proxy
 # networks:

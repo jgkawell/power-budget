@@ -2,8 +2,6 @@ import bodyParser from 'body-parser';
 import config from './utils/config.js';
 import cors from 'cors';
 import express from 'express';
-import fs from 'fs';
-import https from 'https';
 import { baseRouter } from './api/index.js';
 import { accountRouter } from './api/accounts.js';
 import { creditRouter } from './api/credits.js';
@@ -17,10 +15,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Initialize routing
-app.use('/', baseRouter);
-app.use('/account', accountRouter);
-app.use('/credit', creditRouter);
-app.use('/debit', debitRouter);
+app.use('/api', baseRouter);
+app.use('/api/account', accountRouter);
+app.use('/api/credit', creditRouter);
+app.use('/api/debit', debitRouter);
 
 // Error handling
 app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
@@ -32,18 +30,8 @@ app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
   }
 });
 
-// If running in prod, use SSL
-if (config.production === 'true') {
-  console.log('Running in prod mode (https)');
-  var httpsOptions = {
-    key: fs.readFileSync('ssl/server.key'),
-    cert: fs.readFileSync('ssl/server.crt'),
-  };
-  https.createServer(httpsOptions, app).listen(config.port);
-} else {
-  console.log('Running in dev mode (http)');
-  app.listen(config.port);
-}
+console.log('Running in http mode');
+app.listen(config.port);
 
 // Log the current port
 console.log(`Server up on port ${config.port}`);
