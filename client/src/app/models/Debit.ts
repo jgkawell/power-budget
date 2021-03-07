@@ -4,7 +4,7 @@ export class Debit {
   amount: number;
   vendor: string;
   purpose: string;
-  account: string;
+  account_id: string;
   budget: number;
   notes: string;
 }

@@ -31,8 +31,8 @@ export class DebitsComponent implements OnInit {
 
   addDebit(debit: Debit) {
     this.debitService.addDebit(debit).subscribe((newDebit) => {
-      newDebit[0].posted_date = new Date(newDebit[0].posted_date);
-      this.debits.push(newDebit[0]);
+      newDebit.posted_date = new Date(newDebit.posted_date);
+      this.debits.push(newDebit);
     });
   }
 }

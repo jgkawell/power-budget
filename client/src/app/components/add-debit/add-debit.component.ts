@@ -22,7 +22,7 @@ export class AddDebitComponent implements OnInit {
       amount: 1.99,
       vendor: this.vendor,
       purpose: 'Groceries',
-      account: 'Checking',
+      account_id: '422f729f-8833-4be0-a6d8-ba980710c2de',
       budget: 1,
       notes: 'This is a note',
     };
