@@ -1,29 +1,24 @@
-language: node_js
-
-node_js:
-    - "14"
-
-dist: trusty
-
-services:
-    - docker
-
-cache:
-    directories:
-        - "BackEnd/node_modules"
-        - "client/node_modules"
-
-before_script:
-    - npm install -g @angular/cli@9.1.7
-    - npm install -g eslint
-
-script:
-    - cd ./BackEnd
-    - npm run lint
-    - cd ../client
-    - npm install
-    - npm run lint
-    - npm run build
-    - cd ..
-    - mv example.env .env
-    - docker-compose build
+matrix:
+  include:
+    - language: node_js
+      node_js: '14.3.0'
+      services:
+          - docker
+      cache:
+        directories:
+          - 'client/node_modules'
+      before_script:
+        - npm install -g @angular/cli@9.1.9
+      script:
+        - cd client/
+        - npm run build
+        - docker build .
+    - language: go
+      go: '1.16'
+      services:
+          - docker
+      script:
+        - cd api/
+        - make lint
+        - make build
+        - docker build .
