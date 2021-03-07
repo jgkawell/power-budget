@@ -106,7 +106,7 @@ func (a debitsDao) ReadDebit(ctx context.Context, logger *logrus.Entry, id strin
 	var desiredType m.Debit
 	result, err := genericNamedQuery(ctx, logger, a.db, readDebitByID, debit, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to read debit")
 		return m.Debit{}, err
 	}
 
@@ -121,7 +121,7 @@ func (a debitsDao) ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m
 	var debits []m.Debit
 	err := a.db.Select(&debits, readAllDebits)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to readl all debits")
 		return nil, err
 	}
 
@@ -160,7 +160,7 @@ func (a debitsDao) DeleteDebit(ctx context.Context, logger *logrus.Entry, id str
 	var desiredType m.Debit
 	result, err := genericNamedQuery(ctx, logger, a.db, deleteDebitByID, debit, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to delete debit")
 		return m.Debit{}, err
 	}
 

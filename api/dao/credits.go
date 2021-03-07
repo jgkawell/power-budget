@@ -101,7 +101,7 @@ func (a creditsDao) ReadCredit(ctx context.Context, logger *logrus.Entry, id str
 	var desiredType m.Credit
 	result, err := genericNamedQuery(ctx, logger, a.db, readCreditByID, credit, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to read credit")
 		return m.Credit{}, err
 	}
 
@@ -140,7 +140,7 @@ func (a creditsDao) DeleteCredit(ctx context.Context, logger *logrus.Entry, id s
 	var desiredType m.Credit
 	result, err := genericNamedQuery(ctx, logger, a.db, deleteCreditByID, credit, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to delete debit")
 		return m.Credit{}, err
 	}
 

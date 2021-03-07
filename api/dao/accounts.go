@@ -101,7 +101,7 @@ func (a accountsDao) ReadAccount(ctx context.Context, logger *logrus.Entry, id s
 	var desiredType m.Account
 	result, err := genericNamedQuery(ctx, logger, a.db, readAccountByID, account, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to read account")
 		return m.Account{}, err
 	}
 
@@ -140,7 +140,7 @@ func (a accountsDao) DeleteAccount(ctx context.Context, logger *logrus.Entry, id
 	var desiredType m.Account
 	result, err := genericNamedQuery(ctx, logger, a.db, deleteAccountByID, account, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to query row")
+		logger.WithError(err).Error("Failed to delete account")
 		return m.Account{}, err
 	}
 
