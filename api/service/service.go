@@ -14,9 +14,9 @@ type metaService struct {
 }
 
 // CreateService creates the general service wrapper
-func CreateService(genericDao d.MetaDao) MetaService {
+func CreateService(metaDao d.MetaDao) MetaService {
 	return metaService{
-		accounts: CreateAccountsService(genericDao),
+		accounts: CreateAccountsService(metaDao),
 	}
 }
 

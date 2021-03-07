@@ -16,18 +16,17 @@ func main() {
 	// Set context for initialization
 	ctx := context.Background()
 
-	logger.Info("starting")
-
-	// Create database
+	// Create dao
 	dao := d.CreateDao(logger, config.DatabaseConfig)
 	defer dao.Close()
 
-	// Create service layers
+	// Create service
 	service := s.CreateService(dao)
 
-	// Create handlers
+	// Create handler
 	handler := h.CreateHandler(ctx, logger, config, service)
 
 	// Start app
+	logger.Info("starting")
 	handler.RunHandler()
 }

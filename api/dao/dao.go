@@ -24,6 +24,8 @@ type MetaDao interface {
 type metaDao struct {
 	db       *sqlx.DB
 	accounts AccountsDao
+	credits  CreditsDao
+	debits   DebitsDao
 }
 
 // CreateDao returns a sqlx db that uses a pgx connection pool
@@ -53,6 +55,8 @@ func CreateDao(logger *logrus.Entry, config m.DatabaseConfig) MetaDao {
 	conn := metaDao{
 		db:       db,
 		accounts: NewAccountsDao(db),
+		credits:  NewCreditsDao(db),
+		debits:   NewDebitsDao(db),
 	}
 
 	return conn
@@ -104,16 +108,14 @@ func genericNamedQuery(ctx context.Context, logger *logrus.Entry, db *sqlx.DB, s
 		var convertedResult m.Account
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
-	case m.Config:
-		// TODO: This is temporary, will be replaced with real DB models
-		logger.WithField("type", t).Debug("Converting to config")
-		var convertedResult m.Config
+	case m.Credit:
+		logger.WithField("type", t).Debug("Converting to credit")
+		var convertedResult m.Credit
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
-	case m.DatabaseConfig:
-		// TODO: This is temporary, will be replaced with real DB models
-		logger.WithField("type", t).Debug("Converting to database config")
-		var convertedResult m.DatabaseConfig
+	case m.Debit:
+		logger.WithField("type", t).Debug("Converting to debit")
+		var convertedResult m.Debit
 		err = rows.StructScan(&convertedResult)
 		return convertedResult, err
 	default:

@@ -22,8 +22,8 @@ type accountsService struct {
 }
 
 // CreateAccountsService creates the accounts service
-func CreateAccountsService(genericDao d.MetaDao) AccountsService {
-	return accountsService{genericDao}
+func CreateAccountsService(metaDao d.MetaDao) AccountsService {
+	return accountsService{metaDao}
 }
 
 func (s accountsService) CreateAccount(ctx context.Context, logger *logrus.Entry, account m.Account) (m.Account, error) {

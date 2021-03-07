@@ -4,7 +4,7 @@ CREATE TABLE debits (
     amount NUMERIC(12, 2) NOT NULL,
     vendor TEXT NOT NULL,
     purpose TEXT NOT NULL,
-    account TEXT NOT NULL,
+    account_id UUID NOT NULL,
     budget SMALLINT NOT NULL,
     notes TEXT NULL
 );
@@ -15,7 +15,7 @@ CREATE TABLE credits (
     amount NUMERIC(12, 2) NOT NULL,
     source TEXT NOT NULL,
     purpose TEXT NOT NULL,
-    account TEXT NOT NULL,
+    account_id UUID NOT NULL,
     budget SMALLINT NOT NULL,
     notes TEXT NULL
 );

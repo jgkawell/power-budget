@@ -10,7 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const create = `
+const createAccount = `
 	INSERT INTO accounts(
 		id,
 		name,
@@ -31,12 +31,12 @@ const create = `
 		:account_number)
 	RETURNING *;`
 
-const read = `
+const readAccountByID = `
 	SELECT *
 	FROM accounts
 	WHERE id = :id;`
 
-const update = `
+const updateAccount = `
 	UPDATE accounts
 	SET name = :name,
 		balance = :balance,
@@ -48,7 +48,7 @@ const update = `
 	WHERE id = :id
 	RETURNING *;`
 
-const delete = `
+const deleteAccountByID = `
 	DELETE FROM accounts
 	WHERE id = :id
 	RETURNING *;`
@@ -78,7 +78,7 @@ func (a accountsDao) CreateAccount(ctx context.Context, logger *logrus.Entry, ac
 
 	// Attempt generic create
 	var desiredType m.Account
-	result, err := genericNamedQuery(ctx, logger, a.db, create, account, desiredType)
+	result, err := genericNamedQuery(ctx, logger, a.db, createAccount, account, desiredType)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create account")
 		return m.Account{}, err
@@ -99,7 +99,7 @@ func (a accountsDao) ReadAccount(ctx context.Context, logger *logrus.Entry, id s
 	}
 
 	var desiredType m.Account
-	result, err := genericNamedQuery(ctx, logger, a.db, read, account, desiredType)
+	result, err := genericNamedQuery(ctx, logger, a.db, readAccountByID, account, desiredType)
 	if err != nil {
 		logger.WithError(err).Error("Failed to query row")
 		return m.Account{}, err
@@ -117,7 +117,7 @@ func (a accountsDao) UpdateAccount(ctx context.Context, logger *logrus.Entry, ac
 
 	// Attempt generic update
 	var desiredType m.Account
-	result, err := genericNamedQuery(ctx, logger, a.db, update, account, desiredType)
+	result, err := genericNamedQuery(ctx, logger, a.db, updateAccount, account, desiredType)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update account")
 		return m.Account{}, err
@@ -138,7 +138,7 @@ func (a accountsDao) DeleteAccount(ctx context.Context, logger *logrus.Entry, id
 	}
 
 	var desiredType m.Account
-	result, err := genericNamedQuery(ctx, logger, a.db, delete, account, desiredType)
+	result, err := genericNamedQuery(ctx, logger, a.db, deleteAccountByID, account, desiredType)
 	if err != nil {
 		logger.WithError(err).Error("Failed to query row")
 		return m.Account{}, err
