@@ -6,7 +6,7 @@ import { Debit } from '../models/Debit';
 import { environment } from '../../environments/environment';
 
 const httpHeaders = new HttpHeaders({
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
 });
 
 @Injectable({
@@ -20,7 +20,7 @@ export class DebitService {
   // Get all Debits
   getDebits(): Observable<Debit[]> {
     const url = `${this.serverUrl}`;
-    return this.http.get<Debit[]>(url);
+    return this.http.get<Debit[]>(url, {headers: httpHeaders});
   }
 
   // Delete Debit
@@ -31,11 +31,13 @@ export class DebitService {
 
   // Add Debit
   addDebit(debit: Debit): Observable<Debit> {
-    return this.http.post<Debit>(this.serverUrl, debit, { headers: httpHeaders});
+    return this.http.post<Debit>(this.serverUrl, debit, {
+      headers: httpHeaders,
+    });
   }
 
   // Update Debit
   toggleCompleted(debit: Debit): Observable<any> {
-    return this.http.put(this.serverUrl, debit, { headers: httpHeaders});
+    return this.http.put(this.serverUrl, debit, { headers: httpHeaders });
   }
 }
