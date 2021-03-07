@@ -7,6 +7,9 @@ COPY package.json ./
 RUN npm install
 COPY . .
 
+# Check lint
+RUN npm run lint
+
 # Build Angular app
 RUN npm run build
 
