@@ -21,17 +21,14 @@ func (h Handler) CreateDebit(ctx *gin.Context) {
 	}
 
 	// Call dao layer
-	createdDebit, err := h.service.Debits().CreateDebit(ctx, logger, newDebit)
+	debit, err := h.service.Debits().CreateDebit(ctx, logger, newDebit)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create debit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":   "succeeded",
-			"debit": createdDebit,
-		})
+		ctx.JSON(200, debit)
 	}
 }
 
@@ -46,17 +43,30 @@ func (h Handler) ReadDebit(ctx *gin.Context) {
 	logger.Debug("handler")
 
 	// Call dao layer
-	readDebit, err := h.service.Debits().ReadDebit(ctx, logger, id)
+	debit, err := h.service.Debits().ReadDebit(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to read debit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":   "succeeded",
-			"debit": readDebit,
+		ctx.JSON(200, debit)
+	}
+}
+
+// ReadAllDebits reads all debits from the database
+func (h Handler) ReadAllDebits(ctx *gin.Context) {
+	logger := h.logger.WithField("handler", "ReadAllDebits")
+
+	// Call dao layer
+	debits, err := h.service.Debits().ReadAllDebits(ctx, logger)
+	if err != nil {
+		logger.WithError(err).Error("Failed to read debit")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
 		})
+	} else {
+		ctx.JSON(200, debits)
 	}
 }
 
@@ -73,17 +83,14 @@ func (h Handler) UpdateDebit(ctx *gin.Context) {
 	logger = logger.WithField("debit_id", newDebit.ID)
 
 	// Call dao layer
-	updatedDebit, err := h.service.Debits().UpdateDebit(ctx, logger, newDebit)
+	debit, err := h.service.Debits().UpdateDebit(ctx, logger, newDebit)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update debit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":   "succeeded",
-			"debit": updatedDebit,
-		})
+		ctx.JSON(200, debit)
 	}
 }
 
@@ -98,16 +105,13 @@ func (h Handler) DeleteDebit(ctx *gin.Context) {
 	logger.Debug("handler")
 
 	// Call dao layer
-	deletedDebit, err := h.service.Debits().DeleteDebit(ctx, logger, id)
+	debit, err := h.service.Debits().DeleteDebit(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to delete debit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":   "succeeded",
-			"debit": deletedDebit,
-		})
+		ctx.JSON(200, debit)
 	}
 }

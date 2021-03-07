@@ -36,6 +36,10 @@ const readDebitByID = `
 	FROM debits
 	WHERE id = :id;`
 
+const readAllDebits = `
+	SELECT *
+	FROM debits;`
+
 const updateDebit = `
 	UPDATE debits
 	SET posted_date = :posted_date,
@@ -57,6 +61,7 @@ const deleteDebitByID = `
 type DebitsDao interface {
 	CreateDebit(ctx context.Context, logger *logrus.Entry, debit m.Debit) (m.Debit, error)
 	ReadDebit(ctx context.Context, logger *logrus.Entry, id string) (m.Debit, error)
+	ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m.Debit, error)
 	UpdateDebit(ctx context.Context, logger *logrus.Entry, debit m.Debit) (m.Debit, error)
 	DeleteDebit(ctx context.Context, logger *logrus.Entry, id string) (m.Debit, error)
 }
@@ -108,6 +113,21 @@ func (a debitsDao) ReadDebit(ctx context.Context, logger *logrus.Entry, id strin
 	// Cast and return
 	logger.Info("Read debit")
 	return result.(m.Debit), nil
+}
+
+// ReadDebit reads a debit by id
+func (a debitsDao) ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m.Debit, error) {
+
+	var debits []m.Debit
+	err := a.db.Select(&debits, readAllDebits)
+	if err != nil {
+		logger.WithError(err).Error("Failed to query row")
+		return nil, err
+	}
+
+	// Return
+	logger.Info("Read all debits")
+	return debits, nil
 }
 
 // UpdateDebit updates a debit by id with values provided in the struct

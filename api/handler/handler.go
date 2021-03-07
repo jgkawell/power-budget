@@ -61,6 +61,7 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	{
 		debits.POST("/", h.CreateDebit)
 		debits.GET("/:id", h.ReadDebit)
+		debits.GET("/", h.ReadAllDebits)
 		debits.PUT("/", h.UpdateDebit)
 		debits.DELETE("/:id", h.DeleteDebit)
 	}

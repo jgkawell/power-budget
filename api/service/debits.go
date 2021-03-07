@@ -13,6 +13,7 @@ import (
 type DebitsService interface {
 	CreateDebit(ctx context.Context, logger *logrus.Entry, account m.Debit) (m.Debit, error)
 	ReadDebit(ctx context.Context, logger *logrus.Entry, id string) (m.Debit, error)
+	ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m.Debit, error)
 	UpdateDebit(ctx context.Context, logger *logrus.Entry, account m.Debit) (m.Debit, error)
 	DeleteDebit(ctx context.Context, logger *logrus.Entry, id string) (m.Debit, error)
 }
@@ -32,6 +33,10 @@ func (s debitsService) CreateDebit(ctx context.Context, logger *logrus.Entry, ac
 
 func (s debitsService) ReadDebit(ctx context.Context, logger *logrus.Entry, id string) (m.Debit, error) {
 	return s.dao.Debits().ReadDebit(ctx, logger, id)
+}
+
+func (s debitsService) ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m.Debit, error) {
+	return s.dao.Debits().ReadAllDebits(ctx, logger)
 }
 
 func (s debitsService) UpdateDebit(ctx context.Context, logger *logrus.Entry, account m.Debit) (m.Debit, error) {

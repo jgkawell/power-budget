@@ -25,7 +25,7 @@ func GetConfig() (*logrus.Entry, model.Config) {
 
 	// Build config from environment variables
 	config := model.Config{
-		Env: getEnv(logger, "ENV"),
+		Env: getEnv(logger, "API_ENV"),
 		DatabaseConfig: model.DatabaseConfig{
 			Host:     getEnv(logger, "DATABASE_HOST"),
 			Port:     uint16(port),
@@ -42,7 +42,7 @@ func GetConfig() (*logrus.Entry, model.Config) {
 func createLogger() *logrus.Entry {
 	// Create temp logger to grab environment
 	tempLogger := createBasicLogger().WithField("service", serviceName)
-	env := getEnv(tempLogger, "ENV")
+	env := getEnv(tempLogger, "API_ENV")
 
 	// Create global logger and set formatter based on environment
 	newLogger := createBasicLogger()
@@ -53,7 +53,7 @@ func createLogger() *logrus.Entry {
 	}
 
 	// Attempt to read log level: default is INFO
-	logLevelString := getEnv(newLogger.WithField("service", serviceName), "LOG_LEVEL")
+	logLevelString := getEnv(newLogger.WithField("service", serviceName), "API_LOG_LEVEL")
 	logLevel, err := logrus.ParseLevel(logLevelString)
 	if err != nil {
 		tempLogger.WithError(err).WithFields(logrus.Fields{
@@ -64,7 +64,7 @@ func createLogger() *logrus.Entry {
 	}
 
 	// Attempt to read version
-	version := getEnv(newLogger.WithField("service", serviceName), "VERSION")
+	version := getEnv(newLogger.WithField("service", serviceName), "API_VERSION")
 
 	// Create final logger entry and return with unified tagging fields
 	newLogger.SetLevel(logLevel)
