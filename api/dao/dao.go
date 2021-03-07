@@ -18,6 +18,8 @@ const noResultErrorMsg = "Query operation returned no result. Was the ID not in 
 // MetaDao is the wrapper dao around the sub-daos for specific tables
 type MetaDao interface {
 	Accounts() AccountsDao
+	Credits() CreditsDao
+	Debits() DebitsDao
 	Close()
 }
 
@@ -65,6 +67,16 @@ func CreateDao(logger *logrus.Entry, config m.DatabaseConfig) MetaDao {
 // Accounts returns the accounts sub-dao of the meta dao
 func (d metaDao) Accounts() AccountsDao {
 	return d.accounts
+}
+
+// Credits returns the credits sub-dao of the meta dao
+func (d metaDao) Credits() CreditsDao {
+	return d.credits
+}
+
+// Debits returns the debits sub-dao of the meta dao
+func (d metaDao) Debits() DebitsDao {
+	return d.debits
 }
 
 // Close closes the database connection pool
