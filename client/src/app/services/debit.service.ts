@@ -13,24 +13,20 @@ const httpHeaders = new HttpHeaders({
   providedIn: 'root',
 })
 export class DebitService {
-  serverUrl: string = environment.serverURL + '/debit';
+  serverUrl: string = environment.serverURL + '/debits';
 
   constructor(private http: HttpClient) {}
 
   // Get all Debits
   getDebits(): Observable<Debit[]> {
-    const url = `${this.serverUrl}/all`;
+    const url = `${this.serverUrl}`;
     return this.http.get<Debit[]>(url);
   }
 
   // Delete Debit
   deleteDebit(debit: Debit): Observable<Debit> {
-    const url = `${this.serverUrl}`;
-    const options = {
-      headers: httpHeaders,
-      body: { id: debit.id },
-    };
-    return this.http.delete<Debit>(url, options);
+    const url = `${this.serverUrl}/${debit.id}`;
+    return this.http.delete<Debit>(url);
   }
 
   // Add Debit

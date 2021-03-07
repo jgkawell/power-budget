@@ -1,5 +1,5 @@
 export class Debit {
-  id?: number;
+  id?: string;
   name: string;
   balance: number;
   total_in: number;
