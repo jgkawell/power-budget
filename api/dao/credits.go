@@ -17,7 +17,7 @@ const createCredit = `
 		amount,
 		source,
 		purpose,
-		credit,
+		account_id,
 		budget,
 		notes)
 	VALUES(
@@ -26,7 +26,7 @@ const createCredit = `
 		:amount,
 		:source,
 		:purpose,
-		:credit,
+		:account_id,
 		:budget,
 		:notes)
 	RETURNING *;`
@@ -42,7 +42,7 @@ const updateCredit = `
 		amount = :amount,
 		source = :source,
 		purpose = :purpose,
-		credit = :credit,
+		account_id = :account_id,
 		budget = :budget,
 		notes = :notes
 	WHERE id = :id

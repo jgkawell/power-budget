@@ -17,7 +17,7 @@ const createDebit = `
 		amount,
 		vendor,
 		purpose,
-		debit,
+		account_id,
 		budget,
 		notes)
 	VALUES(
@@ -26,7 +26,7 @@ const createDebit = `
 		:amount,
 		:vendor,
 		:purpose,
-		:debit,
+		:account_id,
 		:budget,
 		:notes)
 	RETURNING *;`
@@ -42,7 +42,7 @@ const updateDebit = `
 		amount = :amount,
 		vendor = :vendor,
 		purpose = :purpose,
-		debit = :debit,
+		account_id = :account_id,
 		budget = :budget,
 		notes = :notes
 	WHERE id = :id

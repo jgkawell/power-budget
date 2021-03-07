@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const testID = "c06d9a84-bf80-4b5e-a033-a5df8b3f1469"
+var testID = "10a7295c-72ba-46b8-a379-b8d5391ecb6b"
 
 // CreateAccount creates an account in the database
 func (h Handler) CreateAccount(ctx *gin.Context) {
@@ -31,6 +31,7 @@ func (h Handler) CreateAccount(ctx *gin.Context) {
 			"msg": "failed",
 		})
 	} else {
+		testID = createdAccount.ID
 		ctx.JSON(200, gin.H{
 			"msg":     "succeeded",
 			"account": createdAccount,

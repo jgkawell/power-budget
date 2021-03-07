@@ -39,7 +39,7 @@ type Credit struct {
 	Source     string    `db:"source"`
 	Purpose    string    `db:"purpose"`
 	AccountID  string    `db:"account_id"`
-	Budget     string    `db:"budget"`
+	Budget     int8      `db:"budget"`
 	Notes      string    `db:"notes"`
 }
 
@@ -51,6 +51,6 @@ type Debit struct {
 	Vendor     string    `db:"vendor"`
 	Purpose    string    `db:"purpose"`
 	AccountID  string    `db:"account_id"`
-	Budget     string    `db:"budget"`
+	Budget     int8      `db:"budget"`
 	Notes      string    `db:"notes"`
 }

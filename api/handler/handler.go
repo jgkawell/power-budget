@@ -38,11 +38,32 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 		service: service,
 	}
 
-	// Setup routes
-	h.router.GET("/account/create", h.CreateAccount)
-	h.router.GET("/account/read", h.ReadAccount)
-	h.router.GET("/account/update", h.UpdateAccount)
-	h.router.GET("/account/delete", h.DeleteAccount)
+	// Setup routes for accounts
+	accounts := h.router.Group("api/accounts")
+	{
+		accounts.GET("/create", h.CreateAccount)
+		accounts.GET("/read", h.ReadAccount)
+		accounts.GET("/update", h.UpdateAccount)
+		accounts.GET("/delete", h.DeleteAccount)
+	}
+
+	// Setup routes for credits
+	credits := h.router.Group("api/credits")
+	{
+		credits.GET("/credits/create", h.CreateCredit)
+		credits.GET("/credits/read", h.ReadCredit)
+		credits.GET("/credits/update", h.UpdateCredit)
+		credits.GET("/credits/delete", h.DeleteCredit)
+	}
+
+	// Setup routes for debits
+	debits := h.router.Group("api/debits")
+	{
+		debits.GET("/create", h.CreateDebit)
+		debits.GET("/read", h.ReadDebit)
+		debits.GET("/update", h.UpdateDebit)
+		debits.GET("/delete", h.DeleteDebit)
+	}
 
 	return h
 }
