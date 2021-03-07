@@ -21,14 +21,14 @@ type DatabaseConfig struct {
 
 // Account defines an account in the database
 type Account struct {
-	ID            string  `db:"id"`
-	Name          string  `db:"name"`
-	Balance       float32 `db:"balance"`
-	TotalIn       float32 `db:"total_in"`
-	TotalOut      float32 `db:"total_out"`
-	Type          string  `db:"type"`
-	CardNumber    string  `db:"card_number"`
-	AccountNumber string  `db:"account_number"`
+	ID            string  `db:"id" json:"id"`
+	Name          string  `db:"name" json:"name"`
+	Balance       float32 `db:"balance" json:"balance"`
+	TotalIn       float32 `db:"total_in" json:"total_in"`
+	TotalOut      float32 `db:"total_out" json:"total_out"`
+	Type          string  `db:"type" json:"type"`
+	CardNumber    string  `db:"card_number" json:"card_number"`
+	AccountNumber string  `db:"account_number" json:"account_number"`
 }
 
 // Credit defines a credit in the database

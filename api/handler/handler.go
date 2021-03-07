@@ -41,10 +41,10 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	// Setup routes for accounts
 	accounts := h.router.Group("api/accounts")
 	{
-		accounts.GET("/create", h.CreateAccount)
-		accounts.GET("/read", h.ReadAccount)
-		accounts.GET("/update", h.UpdateAccount)
-		accounts.GET("/delete", h.DeleteAccount)
+		accounts.POST("/", h.CreateAccount)
+		accounts.GET("/:id", h.ReadAccount)
+		accounts.PUT("/", h.UpdateAccount)
+		accounts.DELETE("/:id", h.DeleteAccount)
 	}
 
 	// Setup routes for credits
