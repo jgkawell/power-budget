@@ -33,24 +33,24 @@ type Account struct {
 
 // Credit defines a credit in the database
 type Credit struct {
-	ID         string    `db:"id"`
-	PostedDate time.Time `db:"posted_date"`
-	Amount     float32   `db:"amount"`
-	Source     string    `db:"source"`
-	Purpose    string    `db:"purpose"`
-	AccountID  string    `db:"account_id"`
-	Budget     int8      `db:"budget"`
-	Notes      string    `db:"notes"`
+	ID         string    `db:"id" json:"id"`
+	PostedDate time.Time `db:"posted_date" json:"posted_date" time_format:"2006-01-02"`
+	Amount     float32   `db:"amount" json:"amount"`
+	Source     string    `db:"source" json:"source"`
+	Purpose    string    `db:"purpose" json:"purpose"`
+	AccountID  string    `db:"account_id" json:"account_id"`
+	Budget     int8      `db:"budget" json:"budget"`
+	Notes      string    `db:"notes" json:"notes"`
 }
 
 // Debit defines a debit in the database
 type Debit struct {
-	ID         string    `db:"id"`
-	PostedDate time.Time `db:"posted_date"`
-	Amount     float32   `db:"amount"`
-	Vendor     string    `db:"vendor"`
-	Purpose    string    `db:"purpose"`
-	AccountID  string    `db:"account_id"`
-	Budget     int8      `db:"budget"`
-	Notes      string    `db:"notes"`
+	ID         string    `db:"id" json:"id"`
+	PostedDate time.Time `db:"posted_date" json:"posted_date" time_format:"2006-01-02"`
+	Amount     float32   `db:"amount" json:"amount"`
+	Vendor     string    `db:"vendor" json:"vendor"`
+	Purpose    string    `db:"purpose" json:"purpose"`
+	AccountID  string    `db:"account_id" json:"account_id"`
+	Budget     int8      `db:"budget" json:"budget"`
+	Notes      string    `db:"notes" json:"notes"`
 }

@@ -1,30 +1,23 @@
 package handler
 
 import (
-	"time"
+	"net/http"
 
 	m "api/model"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
-
-var testDebitID = "c06d9a84-bf80-4b5e-a033-a5df8b3f1469"
-
-const testDebitAccountID = "c06d9a84-bf80-4b5e-a033-a5df8b3f1468"
 
 // CreateDebit creates a debit in the database
 func (h Handler) CreateDebit(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "CreateDebit")
 
-	// TODO: Pull this from the request
-	newDebit := m.Debit{
-		PostedDate: time.Now(),
-		Amount:     92.34,
-		Vendor:     "Walmart",
-		Purpose:    "Groceries",
-		AccountID:  testDebitAccountID,
-		Budget:     2,
-		Notes:      "Big purchase",
+	// Pull out debit from request
+	var newDebit m.Debit
+	if err := ctx.ShouldBindJSON(&newDebit); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	// Call dao layer
@@ -35,7 +28,6 @@ func (h Handler) CreateDebit(ctx *gin.Context) {
 			"msg": "failed",
 		})
 	} else {
-		testDebitID = createdDebit.ID
 		ctx.JSON(200, gin.H{
 			"msg":   "succeeded",
 			"debit": createdDebit,
@@ -45,10 +37,16 @@ func (h Handler) CreateDebit(ctx *gin.Context) {
 
 // ReadDebit reads a debit from the database with given id
 func (h Handler) ReadDebit(ctx *gin.Context) {
-	logger := h.logger.WithField("handler", "ReadDebit")
+	// Pull out id to read and add to logger
+	id := ctx.Param("id")
+	logger := h.logger.WithFields(logrus.Fields{
+		"debit_id": id,
+		"handler":  "ReadDebit",
+	})
+	logger.Debug("handler")
 
 	// Call dao layer
-	readDebit, err := h.service.Debits().ReadDebit(ctx, logger, testDebitID)
+	readDebit, err := h.service.Debits().ReadDebit(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to read debit")
 		ctx.JSON(500, gin.H{
@@ -66,17 +64,13 @@ func (h Handler) ReadDebit(ctx *gin.Context) {
 func (h Handler) UpdateDebit(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "UpdateDebit")
 
-	// TODO: Pull this from the request
-	newDebit := m.Debit{
-		ID:         testDebitID,
-		PostedDate: time.Now(),
-		Amount:     92.34,
-		Vendor:     "NEW VENDOR",
-		Purpose:    "Groceries",
-		AccountID:  testDebitAccountID,
-		Budget:     2,
-		Notes:      "Big purchase",
+	// Pull out debit from request
+	var newDebit m.Debit
+	if err := ctx.ShouldBindJSON(&newDebit); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
+	logger = logger.WithField("debit_id", newDebit.ID)
 
 	// Call dao layer
 	updatedDebit, err := h.service.Debits().UpdateDebit(ctx, logger, newDebit)
@@ -95,10 +89,16 @@ func (h Handler) UpdateDebit(ctx *gin.Context) {
 
 // DeleteDebit deletes a debit in the database with given id
 func (h Handler) DeleteDebit(ctx *gin.Context) {
-	logger := h.logger.WithField("handler", "DeleteDebit")
+	// Pull out id to delete and add to logger
+	id := ctx.Param("id")
+	logger := h.logger.WithFields(logrus.Fields{
+		"debit_id": id,
+		"handler":  "DeleteDebit",
+	})
+	logger.Debug("handler")
 
 	// Call dao layer
-	deletedDebit, err := h.service.Debits().DeleteDebit(ctx, logger, testDebitID)
+	deletedDebit, err := h.service.Debits().DeleteDebit(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to delete debit")
 		ctx.JSON(500, gin.H{
