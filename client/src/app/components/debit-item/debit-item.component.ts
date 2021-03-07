@@ -16,16 +16,16 @@ export class DebitItemComponent implements OnInit {
 
   constructor(private debitService: DebitService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Required by angular
+  }
 
   // Set Dynamic Classes
   setClasses() {
-    const classes = {
+    return {
       debit: true,
       'is-complete': this.isComplete,
     };
-
-    return classes;
   }
 
   onToggle(debit: Debit) {

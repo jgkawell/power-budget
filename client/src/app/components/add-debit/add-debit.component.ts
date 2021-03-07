@@ -12,9 +12,9 @@ export class AddDebitComponent implements OnInit {
 
   vendor: string;
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Required by angular
+  }
 
   onSubmit() {
     const debit: Debit = {
