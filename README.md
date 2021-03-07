@@ -1,4 +1,9 @@
-[![Build Status](https://travis-ci.com/jgkawell/power-budget.svg?branch=master)](https://travis-ci.com/jgkawell/power-budget)
+![API Local](https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml/badge.svg?branch=main)
+![API Docker](https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml/badge.svg?branch=main)
+![Database Docker](https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml/badge.svg?branch=main)
+![Client Local](https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml/badge.svg?branch=main)
+![Client Docker](https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml/badge.svg?branch=main)
+
 
 # power-budget
 
