@@ -1,16 +1,16 @@
 <div [ngClass]="setClasses()">
   <table>
     <tr>
-      <th>Date</th>
-      <th>Amount</th>
-      <th>Vendor</th>
-      <th>Purpose</th>
-      <th>Account</th>
-      <th>Budget</th>
-      <th>Notes</th>
+      <th scope="col">Date</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Purpose</th>
+      <th scope="col">Account</th>
+      <th scope="col">Budget</th>
+      <th scope="col">Notes</th>
     </tr>
     <tr>
-      <td>{{ debit.posted_date.toLocaleDateString('en-US') }}</td>
+      <th scope="row">{{ debit.posted_date.toLocaleDateString('en-US') }}</th>
       <td>${{ debit.amount }}</td>
       <td>{{ debit.vendor }}</td>
       <td>{{ debit.purpose }}</td>
