@@ -1,4 +1,4 @@
-name: Database Local CI
+name: Database Docker CI
 
 defaults:
   run:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
