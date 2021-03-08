@@ -1,4 +1,4 @@
-name: Client Local CI
+name: Database Local CI
 
 defaults:
   run:
