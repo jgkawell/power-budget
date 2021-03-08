@@ -1,0 +1,25 @@
+<div [ngClass]="setClasses()">
+  <table aria-label="A specific debit entry">
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Vendor</th>
+      <th scope="col">Purpose</th>
+      <th scope="col">Account</th>
+      <th scope="col">Budget</th>
+      <th scope="col">Notes</th>
+    </tr>
+    <tr>
+      <th scope="row">{{ debit.posted_date.toLocaleDateString('en-US') }}</th>
+      <td>${{ debit.amount }}</td>
+      <td>{{ debit.vendor }}</td>
+      <td>{{ debit.purpose }}</td>
+      <td>{{ debit.account_id }}</td>
+      <td>{{ debit.budget }}</td>
+      <td>{{ debit.notes }}</td>
+    </tr>
+  </table>
+  <p>
+    <button (click)="onDelete(debit)" class="del">x</button>
+  </p>
+</div>
