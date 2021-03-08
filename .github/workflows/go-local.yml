@@ -1,0 +1,38 @@
+name: API Local CI
+
+defaults:
+  run:
+    working-directory: api
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.29
+
+      - name: Download and verify
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Test
+        run: go test -v ./...
+
+      - name: Build
+        run: go build
