@@ -131,7 +131,6 @@ func (a debitsDao) ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m
 }
 
 // UpdateDebit updates a debit by id with values provided in the struct
-// TODO: What happens if all values are not provided? (e.g. Are TEXT fields set to "" in the DB?)
 func (a debitsDao) UpdateDebit(ctx context.Context, logger *logrus.Entry, debit m.Debit) (m.Debit, error) {
 	logger = logger.WithField("debit_id", debit.ID)
 

@@ -48,7 +48,6 @@ func createLogger() *logrus.Entry {
 	newLogger := createBasicLogger()
 	if env == "dev" {
 		newLogger.SetFormatter(&logrus.TextFormatter{})
-		// TODO: Find out why this is doing func AND file (only want func)
 		newLogger.SetReportCaller(true)
 	}
 

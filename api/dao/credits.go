@@ -111,7 +111,6 @@ func (a creditsDao) ReadCredit(ctx context.Context, logger *logrus.Entry, id str
 }
 
 // UpdateCredit updates a credit by id with values provided in the struct
-// TODO: What happens if all values are not provided? (e.g. Are TEXT fields set to "" in the DB?)
 func (a creditsDao) UpdateCredit(ctx context.Context, logger *logrus.Entry, credit m.Credit) (m.Credit, error) {
 	logger = logger.WithField("credit_id", credit.ID)
 
