@@ -1,38 +1,16 @@
-language: node_js
-
-node_js:
-    - "14"
-
-dist: trusty
-
-services:
-    - docker
-
-cache:
-    directories:
-        - "BackEnd/node_modules"
-        - "FrontEnd/node_modules"
-
-before_script:
-    - npm install -g @angular/cli@9.1.7
-    - npm install -g eslint
-
-script:
-    - cd ./BackEnd
-    - npm run lint
-    - cd ../FrontEnd
-    - npm install
-    - npm run lint
-    - npm run build
-    - cd ..
-    - mv example.env .env
-    - docker-compose build
-
-before_deploy:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
-deploy:
-    provider: script
-    script: bash docker_push
-    on:
-        branch: master
+matrix:
+  include:
+    - language: node_js
+      node_js: '14.3.0'
+      services:
+          - docker
+      cache:
+        directories:
+          - 'client/node_modules'
+      before_script:
+        - npm install -g @angular/cli@9.1.9
+      script:
+        - cd client/
+        - npm install
+        - npm run build
+        - docker build .

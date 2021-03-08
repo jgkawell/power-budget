@@ -1,11 +1,15 @@
+# Angular
 dist/
 misc/
 node_modules/
+bin/
 
-*.crt
-*.key
+# Database local storage
+pgdata/
 
-.vscode
+# Sensistive info
 .env
 
+# Other
+.vscode
 TODO
