@@ -111,7 +111,6 @@ func (a accountsDao) ReadAccount(ctx context.Context, logger *logrus.Entry, id s
 }
 
 // UpdateAccount updates an account by id with values provided in the struct
-// TODO: What happens if all values are not provided? (e.g. Ares TEXT fields set to "" in the DB?)
 func (a accountsDao) UpdateAccount(ctx context.Context, logger *logrus.Entry, account m.Account) (m.Account, error) {
 	logger = logger.WithField("account_id", account.ID)
 
