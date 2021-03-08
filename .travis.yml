@@ -9,9 +9,9 @@ matrix:
           - 'client/node_modules'
       before_script:
         - npm install -g @angular/cli@9.1.9
-        - npm install
       script:
         - cd client/
+        - npm install
         - npm run build
         - docker build .
     - language: go
