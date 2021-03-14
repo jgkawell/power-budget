@@ -21,17 +21,14 @@ func (h Handler) CreateCredit(ctx *gin.Context) {
 	}
 
 	// Call dao layer
-	createdCredit, err := h.service.Credits().CreateCredit(ctx, logger, newCredit)
+	credit, err := h.service.Credits().CreateCredit(ctx, logger, newCredit)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create credit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":    "succeeded",
-			"credit": createdCredit,
-		})
+		ctx.JSON(200, credit)
 	}
 }
 
@@ -43,20 +40,32 @@ func (h Handler) ReadCredit(ctx *gin.Context) {
 		"credit_id": id,
 		"handler":   "ReadCredit",
 	})
-	logger.Debug("handler")
 
 	// Call dao layer
-	readCredit, err := h.service.Credits().ReadCredit(ctx, logger, id)
+	credit, err := h.service.Credits().ReadCredit(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to read credit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":    "succeeded",
-			"credit": readCredit,
+		ctx.JSON(200, credit)
+	}
+}
+
+// ReadAllCredits reads all debits from the database
+func (h Handler) ReadAllCredits(ctx *gin.Context) {
+	logger := h.logger.WithField("handler", "ReadAllCredits")
+
+	// Call dao layer
+	debits, err := h.service.Credits().ReadAllCredits(ctx, logger)
+	if err != nil {
+		logger.WithError(err).Error("Failed to read all credits")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
 		})
+	} else {
+		ctx.JSON(200, debits)
 	}
 }
 
@@ -73,17 +82,14 @@ func (h Handler) UpdateCredit(ctx *gin.Context) {
 	logger = logger.WithField("credit_id", newCredit.ID)
 
 	// Call dao layer
-	updatedCredit, err := h.service.Credits().UpdateCredit(ctx, logger, newCredit)
+	credit, err := h.service.Credits().UpdateCredit(ctx, logger, newCredit)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update credit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":    "succeeded",
-			"credit": updatedCredit,
-		})
+		ctx.JSON(200, credit)
 	}
 }
 
@@ -95,19 +101,15 @@ func (h Handler) DeleteCredit(ctx *gin.Context) {
 		"credit_id": id,
 		"handler":   "DeleteCredit",
 	})
-	logger.Debug("handler")
 
 	// Call dao layer
-	deletedCredit, err := h.service.Credits().DeleteCredit(ctx, logger, id)
+	credit, err := h.service.Credits().DeleteCredit(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to delete credit")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":    "succeeded",
-			"credit": deletedCredit,
-		})
+		ctx.JSON(200, credit)
 	}
 }

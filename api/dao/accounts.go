@@ -36,6 +36,10 @@ const readAccountByID = `
 	FROM accounts
 	WHERE id = :id;`
 
+const readAllAccounts = `
+	SELECT *
+	FROM accounts;`
+
 const updateAccount = `
 	UPDATE accounts
 	SET name = :name,
@@ -57,6 +61,7 @@ const deleteAccountByID = `
 type AccountsDao interface {
 	CreateAccount(ctx context.Context, logger *logrus.Entry, account m.Account) (m.Account, error)
 	ReadAccount(ctx context.Context, logger *logrus.Entry, id string) (m.Account, error)
+	ReadAllAccounts(ctx context.Context, logger *logrus.Entry) ([]m.Account, error)
 	UpdateAccount(ctx context.Context, logger *logrus.Entry, account m.Account) (m.Account, error)
 	DeleteAccount(ctx context.Context, logger *logrus.Entry, id string) (m.Account, error)
 }
@@ -108,6 +113,21 @@ func (a accountsDao) ReadAccount(ctx context.Context, logger *logrus.Entry, id s
 	// Cast and return
 	logger.Info("Read account")
 	return result.(m.Account), nil
+}
+
+// ReadAllAccounts reads all accounts
+func (a accountsDao) ReadAllAccounts(ctx context.Context, logger *logrus.Entry) ([]m.Account, error) {
+
+	var accounts []m.Account
+	err := a.db.Select(&accounts, readAllAccounts)
+	if err != nil {
+		logger.WithError(err).Error("Failed to read all accounts")
+		return nil, err
+	}
+
+	// Return
+	logger.Info("Read all accounts")
+	return accounts, nil
 }
 
 // UpdateAccount updates an account by id with values provided in the struct

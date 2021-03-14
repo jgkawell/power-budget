@@ -43,6 +43,7 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	{
 		accounts.POST("/", h.CreateAccount)
 		accounts.GET("/:id", h.ReadAccount)
+		accounts.GET("/", h.ReadAllAccounts)
 		accounts.PUT("/", h.UpdateAccount)
 		accounts.DELETE("/:id", h.DeleteAccount)
 	}
@@ -52,6 +53,7 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	{
 		credits.POST("/", h.CreateCredit)
 		credits.GET("/:id", h.ReadCredit)
+		credits.GET("/", h.ReadAllCredits)
 		credits.PUT("/", h.UpdateCredit)
 		credits.DELETE("/:id", h.DeleteCredit)
 	}

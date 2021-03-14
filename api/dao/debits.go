@@ -115,13 +115,13 @@ func (a debitsDao) ReadDebit(ctx context.Context, logger *logrus.Entry, id strin
 	return result.(m.Debit), nil
 }
 
-// ReadDebit reads a debit by id
+// ReadAllDebits reads all debits
 func (a debitsDao) ReadAllDebits(ctx context.Context, logger *logrus.Entry) ([]m.Debit, error) {
 
 	var debits []m.Debit
 	err := a.db.Select(&debits, readAllDebits)
 	if err != nil {
-		logger.WithError(err).Error("Failed to readl all debits")
+		logger.WithError(err).Error("Failed to read all debits")
 		return nil, err
 	}
 
