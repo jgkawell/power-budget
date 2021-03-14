@@ -43,6 +43,7 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	{
 		accounts.POST("/", h.CreateAccount)
 		accounts.GET("/:id", h.ReadAccount)
+		accounts.GET("/", h.ReadAllAccounts)
 		accounts.PUT("/", h.UpdateAccount)
 		accounts.DELETE("/:id", h.DeleteAccount)
 	}

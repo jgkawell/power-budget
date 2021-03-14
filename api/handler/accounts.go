@@ -53,6 +53,22 @@ func (h Handler) ReadAccount(ctx *gin.Context) {
 	}
 }
 
+// ReadAllAccounts reads all accounts from the database
+func (h Handler) ReadAllAccounts(ctx *gin.Context) {
+	logger := h.logger.WithField("handler", "ReadAllAccounts")
+
+	// Call dao layer
+	accounts, err := h.service.Accounts().ReadAllAccounts(ctx, logger)
+	if err != nil {
+		logger.WithError(err).Error("Failed to read all accounts")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
+		})
+	} else {
+		ctx.JSON(200, accounts)
+	}
+}
+
 // UpdateAccount updates an account in the database with given parameters (id required)
 func (h Handler) UpdateAccount(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "UpdateAccount")
