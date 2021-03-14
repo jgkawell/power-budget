@@ -21,17 +21,14 @@ func (h Handler) CreateAccount(ctx *gin.Context) {
 	}
 
 	// Call dao layer
-	createdAccount, err := h.service.Accounts().CreateAccount(ctx, logger, newAccount)
+	account, err := h.service.Accounts().CreateAccount(ctx, logger, newAccount)
 	if err != nil {
 		logger.WithError(err).Error("Failed to create account")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":     "succeeded",
-			"account": createdAccount,
-		})
+		ctx.JSON(200, account)
 	}
 }
 
@@ -43,20 +40,16 @@ func (h Handler) ReadAccount(ctx *gin.Context) {
 		"account_id": id,
 		"handler":    "ReadAccount",
 	})
-	logger.Debug("handler")
 
 	// Call dao layer
-	readAccount, err := h.service.Accounts().ReadAccount(ctx, logger, id)
+	account, err := h.service.Accounts().ReadAccount(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to read account")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":     "succeeded",
-			"account": readAccount,
-		})
+		ctx.JSON(200, account)
 	}
 }
 
@@ -73,17 +66,14 @@ func (h Handler) UpdateAccount(ctx *gin.Context) {
 	logger = logger.WithField("account_id", newAccount.ID)
 
 	// Call dao layer
-	updatedAccount, err := h.service.Accounts().UpdateAccount(ctx, logger, newAccount)
+	account, err := h.service.Accounts().UpdateAccount(ctx, logger, newAccount)
 	if err != nil {
 		logger.WithError(err).Error("Failed to update account")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":     "succeeded",
-			"account": updatedAccount,
-		})
+		ctx.JSON(200, account)
 	}
 }
 
@@ -95,19 +85,15 @@ func (h Handler) DeleteAccount(ctx *gin.Context) {
 		"account_id": id,
 		"handler":    "DeleteAccount",
 	})
-	logger.Debug("handler")
 
 	// Call dao layer
-	deletedAccount, err := h.service.Accounts().DeleteAccount(ctx, logger, id)
+	account, err := h.service.Accounts().DeleteAccount(ctx, logger, id)
 	if err != nil {
 		logger.WithError(err).Error("Failed to delete account")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})
 	} else {
-		ctx.JSON(200, gin.H{
-			"msg":     "succeeded",
-			"account": deletedAccount,
-		})
+		ctx.JSON(200, account)
 	}
 }

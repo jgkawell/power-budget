@@ -40,7 +40,6 @@ func (h Handler) ReadDebit(ctx *gin.Context) {
 		"debit_id": id,
 		"handler":  "ReadDebit",
 	})
-	logger.Debug("handler")
 
 	// Call dao layer
 	debit, err := h.service.Debits().ReadDebit(ctx, logger, id)
@@ -102,7 +101,6 @@ func (h Handler) DeleteDebit(ctx *gin.Context) {
 		"debit_id": id,
 		"handler":  "DeleteDebit",
 	})
-	logger.Debug("handler")
 
 	// Call dao layer
 	debit, err := h.service.Debits().DeleteDebit(ctx, logger, id)
