@@ -24,21 +24,21 @@ type Account struct {
 	ID            string  `db:"id" json:"id"`
 	Name          string  `db:"name" json:"name"`
 	Balance       float32 `db:"balance" json:"balance"`
-	TotalIn       float32 `db:"total_in" json:"total_in"`
-	TotalOut      float32 `db:"total_out" json:"total_out"`
+	TotalIn       float32 `db:"total_in" json:"totalIn"`
+	TotalOut      float32 `db:"total_out" json:"totalOut"`
 	Type          string  `db:"type" json:"type"`
-	CardNumber    string  `db:"card_number" json:"card_number"`
-	AccountNumber string  `db:"account_number" json:"account_number"`
+	CardNumber    string  `db:"card_number" json:"cardNumber"`
+	AccountNumber string  `db:"account_number" json:"accountNumber"`
 }
 
 // Credit defines a credit in the database
 type Credit struct {
 	ID         string    `db:"id" json:"id"`
-	PostedDate time.Time `db:"posted_date" json:"posted_date" time_format:"2006-01-02"`
+	PostedDate time.Time `db:"posted_date" json:"postedDate" time_format:"2006-01-02"`
 	Amount     float32   `db:"amount" json:"amount"`
 	Source     string    `db:"source" json:"source"`
 	Purpose    string    `db:"purpose" json:"purpose"`
-	AccountID  string    `db:"account_id" json:"account_id"`
+	AccountID  string    `db:"account_id" json:"accountId"`
 	Budget     int8      `db:"budget" json:"budget"`
 	Notes      string    `db:"notes" json:"notes"`
 }
@@ -46,11 +46,11 @@ type Credit struct {
 // Debit defines a debit in the database
 type Debit struct {
 	ID         string    `db:"id" json:"id"`
-	PostedDate time.Time `db:"posted_date" json:"posted_date" time_format:"2006-01-02"`
+	PostedDate time.Time `db:"posted_date" json:"postedDate" time_format:"2006-01-02"`
 	Amount     float32   `db:"amount" json:"amount"`
 	Vendor     string    `db:"vendor" json:"vendor"`
 	Purpose    string    `db:"purpose" json:"purpose"`
-	AccountID  string    `db:"account_id" json:"account_id"`
+	AccountID  string    `db:"account_id" json:"accountId"`
 	Budget     int8      `db:"budget" json:"budget"`
 	Notes      string    `db:"notes" json:"notes"`
 }
