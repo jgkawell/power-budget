@@ -52,6 +52,7 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	{
 		credits.POST("/", h.CreateCredit)
 		credits.GET("/:id", h.ReadCredit)
+		credits.GET("/", h.ReadAllCredits)
 		credits.PUT("/", h.UpdateCredit)
 		credits.DELETE("/:id", h.DeleteCredit)
 	}

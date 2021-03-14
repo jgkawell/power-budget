@@ -53,6 +53,22 @@ func (h Handler) ReadCredit(ctx *gin.Context) {
 	}
 }
 
+// ReadAllCredits reads all debits from the database
+func (h Handler) ReadAllCredits(ctx *gin.Context) {
+	logger := h.logger.WithField("handler", "ReadAllCredits")
+
+	// Call dao layer
+	debits, err := h.service.Credits().ReadAllCredits(ctx, logger)
+	if err != nil {
+		logger.WithError(err).Error("Failed to read all credits")
+		ctx.JSON(500, gin.H{
+			"msg": "failed",
+		})
+	} else {
+		ctx.JSON(200, debits)
+	}
+}
+
 // UpdateCredit updates a credit in the database with given parameters (id required)
 func (h Handler) UpdateCredit(ctx *gin.Context) {
 	logger := h.logger.WithField("handler", "UpdateCredit")

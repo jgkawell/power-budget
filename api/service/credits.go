@@ -13,6 +13,7 @@ import (
 type CreditsService interface {
 	CreateCredit(ctx context.Context, logger *logrus.Entry, account m.Credit) (m.Credit, error)
 	ReadCredit(ctx context.Context, logger *logrus.Entry, id string) (m.Credit, error)
+	ReadAllCredits(ctx context.Context, logger *logrus.Entry) ([]m.Credit, error)
 	UpdateCredit(ctx context.Context, logger *logrus.Entry, account m.Credit) (m.Credit, error)
 	DeleteCredit(ctx context.Context, logger *logrus.Entry, id string) (m.Credit, error)
 }
@@ -32,6 +33,10 @@ func (s creditsService) CreateCredit(ctx context.Context, logger *logrus.Entry, 
 
 func (s creditsService) ReadCredit(ctx context.Context, logger *logrus.Entry, id string) (m.Credit, error) {
 	return s.dao.Credits().ReadCredit(ctx, logger, id)
+}
+
+func (s creditsService) ReadAllCredits(ctx context.Context, logger *logrus.Entry) ([]m.Credit, error) {
+	return s.dao.Credits().ReadAllCredits(ctx, logger)
 }
 
 func (s creditsService) UpdateCredit(ctx context.Context, logger *logrus.Entry, account m.Credit) (m.Credit, error) {

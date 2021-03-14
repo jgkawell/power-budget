@@ -60,7 +60,7 @@ func (h Handler) ReadAllDebits(ctx *gin.Context) {
 	// Call dao layer
 	debits, err := h.service.Debits().ReadAllDebits(ctx, logger)
 	if err != nil {
-		logger.WithError(err).Error("Failed to read debit")
+		logger.WithError(err).Error("Failed to read all debits")
 		ctx.JSON(500, gin.H{
 			"msg": "failed",
 		})

@@ -36,6 +36,10 @@ const readCreditByID = `
 	FROM credits
 	WHERE id = :id;`
 
+const readAllCredits = `
+	SELECT *
+	FROM credits;`
+
 const updateCredit = `
 	UPDATE credits
 	SET posted_date = :posted_date,
@@ -57,6 +61,7 @@ const deleteCreditByID = `
 type CreditsDao interface {
 	CreateCredit(ctx context.Context, logger *logrus.Entry, credit m.Credit) (m.Credit, error)
 	ReadCredit(ctx context.Context, logger *logrus.Entry, id string) (m.Credit, error)
+	ReadAllCredits(ctx context.Context, logger *logrus.Entry) ([]m.Credit, error)
 	UpdateCredit(ctx context.Context, logger *logrus.Entry, credit m.Credit) (m.Credit, error)
 	DeleteCredit(ctx context.Context, logger *logrus.Entry, id string) (m.Credit, error)
 }
@@ -110,6 +115,21 @@ func (a creditsDao) ReadCredit(ctx context.Context, logger *logrus.Entry, id str
 	return result.(m.Credit), nil
 }
 
+// ReadAllCredits reads all credits
+func (a creditsDao) ReadAllCredits(ctx context.Context, logger *logrus.Entry) ([]m.Credit, error) {
+
+	var credits []m.Credit
+	err := a.db.Select(&credits, readAllCredits)
+	if err != nil {
+		logger.WithError(err).Error("Failed to read all credits")
+		return nil, err
+	}
+
+	// Return
+	logger.Info("Read all credits")
+	return credits, nil
+}
+
 // UpdateCredit updates a credit by id with values provided in the struct
 func (a creditsDao) UpdateCredit(ctx context.Context, logger *logrus.Entry, credit m.Credit) (m.Credit, error) {
 	logger = logger.WithField("credit_id", credit.ID)
@@ -139,7 +159,7 @@ func (a creditsDao) DeleteCredit(ctx context.Context, logger *logrus.Entry, id s
 	var desiredType m.Credit
 	result, err := genericNamedQuery(ctx, logger, a.db, deleteCreditByID, credit, desiredType)
 	if err != nil {
-		logger.WithError(err).Error("Failed to delete debit")
+		logger.WithError(err).Error("Failed to delete credit")
 		return m.Credit{}, err
 	}
 
