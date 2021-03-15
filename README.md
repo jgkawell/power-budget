@@ -1,11 +1,14 @@
-![API Local](https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml/badge.svg?branch=main)
-![API Docker](https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml/badge.svg?branch=main)
-![Database Docker](https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml/badge.svg?branch=main)
-![Client Local](https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml/badge.svg?branch=main)
-![Client Docker](https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml/badge.svg?branch=main)
+<p align="center">
+<img src="https://raw.githubusercontent.com//jgkawell/power-budget/master/client/src/assets/icons/icon-72x72.png?raw=true">
+<br/>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml/badge.svg?branch=main" alt="API Local CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml/badge.svg?branch=main" alt="API Docker CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml/badge.svg?branch=main" alt="Database Docker CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml/badge.svg?branch=main" alt="Client Local CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml/badge.svg?branch=main" alt="Client Docker CI Status"></a>
+</p>
 
-
-# power-budget
+# Power Budget
 
 A powerful budgeting PWA served by a locally hosted API and database:
 
@@ -41,3 +44,60 @@ docker-compose up -d
 # Usage
 
 Once the Docker containers are running, you should be able to navigate to the application in your browser at http://localhost:4200/
+
+# Development
+
+## API
+
+The API for Power Budget is written in Go and resides under the `/api` directory of the repository.
+
+A list of needed tools to develop the API:
+
+- go `v1.16` (I suggest using [gvm](https://github.com/moovweb/gvm) as your go version manager)
+- [Docker](https://docs.docker.com/get-docker/) (and `docker-compose`)
+
+First copy the `example.env` file to the root (for docker-compose to read from) and to the `/api` directory (for go to read from):
+
+```bash
+cp ./example.env .env
+cp ./example.env ./api/.env
+```
+
+Then start up the Database:
+
+```bash
+docker-compose up -d database
+```
+
+Then install the needed go modules and run the application:
+
+```bash
+cd ./api
+go mod download
+make run
+```
+
+You should now be able to interact with the API at `http://localhost:8080`
+
+## Client
+
+The Client for Power Budget is written in Angluar (typescript) and resides under the `/client` directory of the repository.
+
+A list of needed tools to develop the Client:
+
+- Node (I recommend using [nvm](https://github.com/nvm-sh/nvm) as your node version manager)
+- [Angular CLI](https://cli.angular.io/) `v1.9.1`
+- [Docker](https://docs.docker.com/get-docker/) (and `docker-compose`)
+
+First, go ahead and start up the API and Database in Docker:
+
+```bash
+docker-compose up -d database api
+```
+
+Then install the needed modules and run the application:
+
+```bash
+npm install
+npm run start
+```
