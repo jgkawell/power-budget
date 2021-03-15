@@ -2,6 +2,7 @@ package tools
 
 import (
 	"os"
+	"runtime"
 	"strconv"
 
 	"api/model"
@@ -47,7 +48,9 @@ func createLogger() *logrus.Entry {
 	// Create global logger and set formatter based on environment
 	newLogger := createBasicLogger()
 	if env == "dev" {
-		newLogger.SetFormatter(&logrus.TextFormatter{})
+		formatter := &logrus.TextFormatter{}
+		formatter.CallerPrettyfier = getCaller
+		newLogger.SetFormatter(formatter)
 		newLogger.SetReportCaller(true)
 	}
 
@@ -75,10 +78,26 @@ func createLogger() *logrus.Entry {
 	return logger
 }
 
+// getCaller extracts the caller function to add to the logrus logger
+func getCaller(*runtime.Frame) (function string, file string) {
+	// stackNumber is the level in the call stack that corresponds to where logrus.* was called from
+	stackNumber := 7
+	pc, _, _, ok := runtime.Caller(stackNumber)
+	if !ok {
+		return "", ""
+	}
+	fn := runtime.FuncForPC(pc).Name()
+	return fn, ""
+}
+
 // createBasicLogger builds a simple logrus logger with default values
 func createBasicLogger() *logrus.Logger {
+	// Create custom formatter
+	formatter := &logrus.JSONFormatter{}
+	formatter.CallerPrettyfier = getCaller
+	// Create custom logger
 	newLogger := logrus.New()
-	newLogger.SetFormatter(&logrus.JSONFormatter{})
+	newLogger.SetFormatter(formatter)
 	newLogger.SetOutput(os.Stdout)
 	newLogger.SetLevel(logrus.InfoLevel)
 
