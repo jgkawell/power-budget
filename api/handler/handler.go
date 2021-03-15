@@ -41,30 +41,30 @@ func CreateHandler(ctx context.Context, logger *logrus.Entry, config m.Config, s
 	// Setup routes for accounts
 	accounts := h.router.Group("api/accounts")
 	{
-		accounts.POST("/", h.CreateAccount)
+		accounts.POST("", h.CreateAccount)
 		accounts.GET("/:id", h.ReadAccount)
-		accounts.GET("/", h.ReadAllAccounts)
-		accounts.PUT("/", h.UpdateAccount)
+		accounts.GET("", h.ReadAllAccounts)
+		accounts.PUT("", h.UpdateAccount)
 		accounts.DELETE("/:id", h.DeleteAccount)
 	}
 
 	// Setup routes for credits
 	credits := h.router.Group("api/credits")
 	{
-		credits.POST("/", h.CreateCredit)
+		credits.POST("", h.CreateCredit)
 		credits.GET("/:id", h.ReadCredit)
-		credits.GET("/", h.ReadAllCredits)
-		credits.PUT("/", h.UpdateCredit)
+		credits.GET("", h.ReadAllCredits)
+		credits.PUT("", h.UpdateCredit)
 		credits.DELETE("/:id", h.DeleteCredit)
 	}
 
 	// Setup routes for debits
 	debits := h.router.Group("api/debits")
 	{
-		debits.POST("/", h.CreateDebit)
+		debits.POST("", h.CreateDebit)
 		debits.GET("/:id", h.ReadDebit)
-		debits.GET("/", h.ReadAllDebits)
-		debits.PUT("/", h.UpdateDebit)
+		debits.GET("", h.ReadAllDebits)
+		debits.PUT("", h.UpdateDebit)
 		debits.DELETE("/:id", h.DeleteDebit)
 	}
 
