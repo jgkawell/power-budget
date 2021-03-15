@@ -1,11 +1,14 @@
-![API Local](https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml/badge.svg?branch=main)
-![API Docker](https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml/badge.svg?branch=main)
-![Database Docker](https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml/badge.svg?branch=main)
-![Client Local](https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml/badge.svg?branch=main)
-![Client Docker](https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml/badge.svg?branch=main)
+<p align="center">
+<img src="https://raw.githubusercontent.com//jgkawell/power-budget/master/client/src/assets/icons/icon-72x72.png?raw=true">
+<br/>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/api-local.yml/badge.svg?branch=main" alt="API Local CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/api-docker.yml/badge.svg?branch=main" alt="API Docker CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/database-docker.yml/badge.svg?branch=main" alt="Database Docker CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/client-local.yml/badge.svg?branch=main" alt="Client Local CI Status"></a>
+<a href="https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml"><img src="https://github.com/jgkawell/power-budget/actions/workflows/client-docker.yml/badge.svg?branch=main" alt="Client Docker CI Status"></a>
+</p>
 
-
-# power-budget
+# Power Budget
 
 A powerful budgeting PWA served by a locally hosted API and database:
 
