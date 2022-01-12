@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: power-budget-api
+  labels:
+    app: power-budget-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: power-budget-api
+  template:
+    metadata:
+      labels:
+        app: power-budget-api
+    spec:
+      containers:
+      - name: power-budget-api
+        image: localhost:32000/power-budget-api:latest
+        ports:
+        - containerPort: 8080
